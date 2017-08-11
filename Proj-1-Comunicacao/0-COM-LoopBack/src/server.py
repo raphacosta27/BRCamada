@@ -26,6 +26,7 @@ def main():
     rxBuffer, nRx = com.getData(txLen)
 
     # log
+    start_receiving_time = time.time()
     print ("Lido              {} bytes ".format(nRx))
 
     # Salva imagem recebida em arquivo
@@ -41,6 +42,8 @@ def main():
     # Encerra comunicação
     print("-------------------------")
     print("Comunicação encerrada")
+    finished_receiving_time = time.time() - start_receiving_time
+    print("Tempo de recepção: " + str(finished_receiving_time))
     print("-------------------------")
     com.disable()
 
