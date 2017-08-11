@@ -1,5 +1,6 @@
 from enlace import *
 import time
+import interface
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -9,7 +10,8 @@ import time
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 serialName = "COM4"                  # Windows(variacao de)
 
-def main():
+def main(window, filename):
+
     # Inicializa enlace
     com = enlace(serialName)
 
@@ -17,7 +19,7 @@ def main():
     com.enable()
 
     # Endereco da imagem a ser transmitida
-    imageR = "./imgs/panda.jpg"
+    imageR = filename
 
     start_time = time.time()
 
@@ -46,6 +48,7 @@ def main():
     # Atualiza dados da transmissão
     txSize = com.tx.getStatus()
     print ("Transmitido       {} bytes ".format(txSize))
+    interface.MyFrame.finished(window)
     elapsed_time = time.time() - start_time
     print("tempo de transmissao " + str(elapsed_time))
 
