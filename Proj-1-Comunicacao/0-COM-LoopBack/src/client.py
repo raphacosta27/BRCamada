@@ -19,6 +19,8 @@ def main():
     # Endereco da imagem a ser transmitida
     imageR = "./imgs/panda.jpg"
 
+    start_time = time.time()
+
     # Log
     print("-------------------------")
     print("Comunicação inicializada")
@@ -44,6 +46,8 @@ def main():
     # Atualiza dados da transmissão
     txSize = com.tx.getStatus()
     print ("Transmitido       {} bytes ".format(txSize))
+    elapsed_time = time.time() - start_time
+    print("tempo de transmissao " + str(elapsed_time))
 
 if __name__ == "__main__":
     main()
