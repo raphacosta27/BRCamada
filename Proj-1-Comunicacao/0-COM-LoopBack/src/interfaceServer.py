@@ -11,7 +11,7 @@ class MyFrame(Frame):
 		self.grid(sticky=W+E+N+S)
 
 		self.button = Button(self, text="Start", command=self.receive, width=50)
-		self.button.grid(row=1, column=0, sticky=W)
+		self.button.grid(row=0, column=0, sticky=W)
 
 
 	def receive(self):

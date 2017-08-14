@@ -9,22 +9,22 @@ from tkinter import *
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM4"                  # Windows(variacao de)
+serialName = "COM6"                  # Windows(variacao de)
 
 def main(window_server):
+
+    status_label = Label(window_server, text ="Recebendo dados ....")
+    status_label.grid(row = 1, column =0, sticky = W)
 
     # Inicializa enlace
     com = enlace(serialName)
     # Ativa comunicacao
     com.enable()
 
-    txLen = 49284
+    txLen = 5992
 
     # Endereco da imagem a ser salva
     imageW = "./imgs/recebida.png"
-
-    status_label = Label(window_server, text ="Recebendo dados ....")
-    status_label.grid(row =1, column =0, sticky = W)
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
