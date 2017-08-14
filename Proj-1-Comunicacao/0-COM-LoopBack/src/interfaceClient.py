@@ -11,7 +11,7 @@ class MyFrame(Frame):
 		self.filename = ""
 		self.client = client
 		Frame.__init__(self)
-		self.master.title("Client_Server")
+		self.master.title("Client")
 		self.master.rowconfigure(5, weight=1)
 		self.master.columnconfigure(5, weight=1)
 		self.grid(sticky=W+E+N+S)
@@ -22,6 +22,10 @@ class MyFrame(Frame):
 		self.button_send = Button(self, text="Send", command = self.send, width=10)
 		self.button_send.grid(row=1, column=1, sticky=W)
 
+		# self.status_label = Label(self)
+		# self.status_label.grid (row = 2, column = 0, sticky=W)
+		# self.status_label.grid_remove()
+		# self.status_label.grid()
 
 	def send(self):
 		client.main(self ,self.filename)
@@ -44,11 +48,7 @@ class MyFrame(Frame):
 				showerror("Open Source File", "Failed to read file\n'%s'" % fname)
 			return
 
-	def get_filename(self):
-		return self.label.cget("text")
-
 	def finished (self):
-		print("entrou")
 		self.master.destroy()
 
 
