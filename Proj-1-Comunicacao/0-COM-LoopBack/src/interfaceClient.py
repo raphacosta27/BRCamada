@@ -16,17 +16,12 @@ class MyFrame(Frame):
 		self.master.columnconfigure(5, weight=1)
 		self.grid(sticky=W+E+N+S)
 
-		# self.label = Label(self)
-		# self.label.grid(row=0, column=0, sticky=W)
-
 		self.button = Button(self, text="Browse", command=self.load_file, width=10)
 		self.button.grid(row=1, column=0, sticky=W)
 
 		self.button_send = Button(self, text="Send", command = self.send, width=10)
 		self.button_send.grid(row=1, column=1, sticky=W)
 
-		# self.can = Canvas(self.root)
-		# self.can.grid(row = 2, column = 0, sticky = W)
 
 	def send(self):
 		client.main(self ,self.filename)
@@ -37,15 +32,14 @@ class MyFrame(Frame):
 			try:
 				self.filename = fname
 				print("""here it comes: self.settings["template"].set(fname)""")
-				#self.label.config(text=str(self.filename))
+
 				print(self.filename	)
 				self.img = Image.open(str(self.filename))
 				self.width, self.height = self.img.size
 				self.photo = ImageTk.PhotoImage(self.img)
 				self.label = Label(self, image = self.photo)
 				self.label.grid(row =0, column =0, sticky = W)
-				# self.label.image = self.photo
-				#self.can.create_image(self.width, self.height ,image=self.imagem)
+				self.button_send.grid(row=1, column=0, sticky=E)
 			except:
 				showerror("Open Source File", "Failed to read file\n'%s'" % fname)
 			return
