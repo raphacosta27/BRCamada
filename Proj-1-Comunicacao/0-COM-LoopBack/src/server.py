@@ -16,7 +16,7 @@ def main():
     # Ativa comunicacao
     com.enable()
 
-    txLen = 5992
+    txLen = 49284
 
     # Endereco da imagem a ser salva
     imageW = "./imgs/recebida.png"
