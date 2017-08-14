@@ -1,5 +1,7 @@
 from enlace import *
 import time
+import interfaceServer
+from tkinter import *
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -7,9 +9,9 @@ import time
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM6"                  # Windows(variacao de)
+serialName = "COM4"                  # Windows(variacao de)
 
-def main():
+def main(window_server):
 
     # Inicializa enlace
     com = enlace(serialName)
@@ -21,9 +23,13 @@ def main():
     # Endereco da imagem a ser salva
     imageW = "./imgs/recebida.png"
 
+    status_label = Label(window_server, text ="Recebendo dados ....")
+    status_label.grid(row =1, column =0, sticky = W)
+
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
     rxBuffer, nRx = com.getData(txLen)
+
 
     # log
     start_receiving_time = time.time()
