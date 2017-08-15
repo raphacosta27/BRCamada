@@ -2,6 +2,7 @@ from enlace import *
 import time
 import interfaceServer
 from tkinter import *
+from PIL import Image, ImageTk
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -11,7 +12,7 @@ from tkinter import *
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 serialName = "COM5"                  # Windows(variacao de)
 
-def main():
+def main(window_server):
 
     # Inicializa enlace
     com = enlace(serialName)
@@ -32,12 +33,18 @@ def main():
     start_receiving_time = time.time()
     print ("Lido              {} bytes ".format(nRx))
 
+    status_label1 = Label(window_server, text ="Lido              {} bytes ".format(nRx))
+    status_label1.grid(row = 2, column =0, sticky = W)
+
     # Salva imagem recebida em arquivo
     print("-------------------------")
     print ("Salvando dados no arquivo :")
     print (" - {}".format(imageW))
     f = open(imageW, 'wb')
     f.write(rxBuffer)
+
+    status_label2 = Label(window_server, text ="Salvando dados no arquivo : - {}".format(imageW))
+    status_label2.grid(row = 3, column =0, sticky = W)
 
     # Fecha arquivo de imagem
     f.close()
@@ -49,6 +56,20 @@ def main():
     print("Tempo de recepção: " + str(finished_receiving_time))
     print("-------------------------")
     com.disable()
+
+    status_label3 = Label(window_server, text ="Comunicação encerrada")
+    status_label3.grid(row = 4, column =0, sticky = W)
+
+    status_label4 = Label(window_server, text ="Tempo de recepção: " + str(finished_receiving_time))
+    status_label4.grid(row = 5, column =0, sticky = W)
+
+    img = Image.open(imageW)
+    photo = ImageTk.PhotoImage(img)
+    width, height = img.size
+    label = Label(window_server, image = photo)
+    label.grid(row =6, column =0, sticky = W)
+
+
 
 if __name__ == "__main__":
     main()
