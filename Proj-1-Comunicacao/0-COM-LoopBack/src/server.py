@@ -10,7 +10,7 @@ from PIL import Image, ImageTk
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM5"                  # Windows(variacao de)
+serialName = "COM7"                  # Windows(variacao de)
 
 def main(window_server):
 
@@ -22,7 +22,7 @@ def main(window_server):
     txLen = 5992
 
     # Endereco da imagem a ser salva
-    imageW = "./imgs/recebida.png"
+    imageW = "./imgs/recebida.jpg"
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
@@ -63,13 +63,7 @@ def main(window_server):
     status_label4 = Label(window_server, text ="Tempo de recepção: " + str(finished_receiving_time))
     status_label4.grid(row = 5, column =0, sticky = W)
 
-    img = Image.open(imageW)
-    photo = ImageTk.PhotoImage(img)
-    width, height = img.size
-    label = Label(window_server, image = photo)
-    label.grid(row =6, column =0, sticky = W)
-
-
+    interfaceServer.MyFrame.plot_img(window_server,imageW)
 
 if __name__ == "__main__":
     main()

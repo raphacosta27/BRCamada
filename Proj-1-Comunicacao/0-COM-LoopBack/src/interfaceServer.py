@@ -1,12 +1,13 @@
 from tkinter import *
 import server
+from PIL import Image, ImageTk
 
 class MyFrame(Frame):
 	def __init__(self):
 		self.root = Tk()
 		Frame.__init__(self)
 		self.master.title("Server")
-		self.master.rowconfigure(6, weight=1)
+		self.master.rowconfigure(7, weight=1)
 		self.master.columnconfigure(5, weight=1)
 		self.grid(sticky=W+E+N+S)
 
@@ -20,6 +21,12 @@ class MyFrame(Frame):
 	def receive(self):
 		print("passei por aq")
 		server.main(self)
+
+	def plot_img(self, imagem):
+		img = Image.open(imagem)
+		photo = ImageTk.PhotoImage(img)
+		label = Label(self, image = photo)
+		label.grid(row = 6, column =0, sticky = W)
 
 if __name__ == "__main__":
 	MyFrame().mainloop()
