@@ -28,7 +28,7 @@ class MyFrame(Frame):
 		# self.status_label.grid()
 
 	def send(self):
-		client.main(self ,self.filename)
+		client.main(self ,self.filename, self.root)
 
 	def load_file(self):
 		fname = askopenfilename()
@@ -37,7 +37,7 @@ class MyFrame(Frame):
 				self.filename = fname
 				print("""here it comes: self.settings["template"].set(fname)""")
 
-				print(self.filename	)
+				print(self.filename)
 				self.img = Image.open(str(self.filename))
 				self.width, self.height = self.img.size
 				self.photo = ImageTk.PhotoImage(self.img)

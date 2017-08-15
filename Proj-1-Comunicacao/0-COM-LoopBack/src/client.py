@@ -9,9 +9,9 @@ from tkinter import *
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM6"                  # Windows(variacao de)
+serialName = "COM7"                  # Windows(variacao de)
 
-def main(window_client, filename):
+def main(window_client, filename, root):
 
     # Inicializa enlace
     com = enlace(serialName)
@@ -65,12 +65,9 @@ def main(window_client, filename):
     new_label2 = Label(window_client, text="tempo de transmissao " + str(elapsed_time))
     new_label2.grid(row=4, column=0, sticky=W)
 
-    # quit_button = Button(window_client, text="Quit", command = quit(window_client))
-    # quit_button.grid(row=5, column=0, sticky=W)
+    quit_button = Button(window_client, text="Quit", command = root.destroy, width=10)
+    quit_button.grid(row=5, column=0, sticky=W+N+S+E)
 
-
-# def quit(window):
-#     interfaceClient.MyFrame.finished(window)
 
 if __name__ == "__main__":
     main()
