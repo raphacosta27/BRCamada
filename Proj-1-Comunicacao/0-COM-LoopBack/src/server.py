@@ -63,7 +63,7 @@ def main(window_server):
     status_label4 = Label(window_server, text ="Tempo de recepção: " + str(finished_receiving_time))
     status_label4.grid(row = 5, column =0, sticky = W)
 
-    interfaceServer.MyFrame.plot_img(window_server,imageW)
+    interfaceServer.MyFrame.plot_img(window_server, imageW)
 
 if __name__ == "__main__":
     main()

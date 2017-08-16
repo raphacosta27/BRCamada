@@ -1,6 +1,7 @@
 from tkinter import *
 import server
 from PIL import Image, ImageTk
+import time
 
 class MyFrame(Frame):
 	def __init__(self):
@@ -19,13 +20,15 @@ class MyFrame(Frame):
 
 
 	def receive(self):
-		print("passei por aq")
 		server.main(self)
 
 	def plot_img(self, imagem):
 		img = Image.open(imagem)
 		photo = ImageTk.PhotoImage(img)
+		#PhotoImage(file=r)
+		#ImageTk.PhotoImage(img)
 		label = Label(self, image = photo)
+		label.image = photo
 		label.grid(row = 6, column =0, sticky = W)
 
 if __name__ == "__main__":
