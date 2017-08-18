@@ -9,6 +9,8 @@
 
 from enlace import *
 import time
+import binascii
+
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -16,7 +18,7 @@ import time
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM6"                  # Windows(variacao de)
+serialName = "COM7"                  # Windows(variacao de)
 
 def main():
     # Inicializa enlace
@@ -26,7 +28,7 @@ def main():
     com.enable()
 
     # Endereco da imagem a ser transmitida
-    imageR = "./imgs/imageD.png"
+    imageR = "./imgs/imageC.png"
 
     # Endereco da imagem a ser salva
     imageW = "./imgs/recebida.png"
@@ -47,7 +49,9 @@ def main():
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
-    com.sendData(txBuffer)
+    com.sendData(txBuffer, imageR)
+    # print(txBuffer)
+
 
     # espera o fim da transmissão
     while(com.tx.getIsBussy()):
@@ -56,8 +60,6 @@ def main():
     # Atualiza dados da transmissão
     txSize = com.tx.getStatus()
     print ("Transmitido       {} bytes ".format(txSize))
-
-    ###################################################################
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
