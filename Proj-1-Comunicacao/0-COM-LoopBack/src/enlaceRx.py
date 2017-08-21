@@ -51,7 +51,6 @@ class RX(object):
 
     def threadPause(self):
         """ Stops the RX thread to run
-
         This must be used when manipulating the Rx buffer
         """
         self.threadMutex = False
@@ -94,7 +93,6 @@ class RX(object):
 
     def getNData(self, size):
         """ Read N bytes of data from the reception buffer
-
         This function blocks until the number of bytes is received
         """
         while(self.getBufferLen() < size):
@@ -107,5 +105,3 @@ class RX(object):
         """ Clear the reception buffer
         """
         self.buffer = b""
-
-
