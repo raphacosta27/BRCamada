@@ -29,13 +29,23 @@ class Empacotamento():
 
     def unpackage (self, packet):
         payload = bytes([])
+        head = packet[0:3]
+        payload_len = head[1:]
+        payload = packet[3:payload_len]
+
+# teste = open('./imgs/panda.jpg', 'rb').read()
+# dados = bytes([])
+# alo = Empacotamento()
+# build = alo.buildDataPacket(teste)
+# print(build[0:3])
+# print(binascii.b2a_hex(build[1:3]))
+scriptpath = os.path.dirname(__file__)
+filename = os.path.join(scriptpath, '/imgs/panda.jpg')
+print(scriptpath)
 
 
-dados = bytes([0x00,0x00,0x00])
-alo = Empacotamento()
-build = alo.buildDataPacket(dados)
-print(build[6:])
-print(binascii.unhexlify(build[6:]))
+
+# print(binascii.b2a_hex(build[1]))
     # def extensionToBinary (name):
     #     nome, ext = os.path.splitext(name)
     #     binario = bytearray(ext, encoding = 'ascii')
