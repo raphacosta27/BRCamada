@@ -1,6 +1,7 @@
 from construct import *
 import os
 import binascii
+import struct
 
 class Empacotamento():
     
@@ -31,18 +32,31 @@ class Empacotamento():
         payload = bytes([])
         head = packet[0:3]
         payload_len = head[1:]
-        payload = packet[3:payload_len]
+        # numero = binascii.b2a_hex(payload_len) #isso da 1768 que é 5992 em hex
+        # print(payload_len.decode('utf-8'))
+        palavra_byte = payload_len.decode('utf-8')
+        print(palavra_byte)
+        # print(int(numero, 2))
 
-# teste = open('./imgs/panda.jpg', 'rb').read()
+        # payload = packet[3:payload_len]
+
+
+teste = open('./imgs/panda.jpg', 'rb').read()
+#/Proj-1-Comunicacao/0-COM-LoopBack/src
 # dados = bytes([])
-# alo = Empacotamento()
-# build = alo.buildDataPacket(teste)
-# print(build[0:3])
-# print(binascii.b2a_hex(build[1:3]))
-scriptpath = os.path.dirname(__file__)
-filename = os.path.join(scriptpath, '/imgs/panda.jpg')
-print(scriptpath)
+alo = Empacotamento()
+build = alo.buildDataPacket(teste)
+alo.unpackage(build)
 
+
+#5992 em decimal é 5992, em hex é 1768 e o python entende como 0x17h
+
+# alo.unpackage(build)
+
+
+
+
+# print(binascii.b2a_hex(build[1:3]))
 
 
 # print(binascii.b2a_hex(build[1]))
