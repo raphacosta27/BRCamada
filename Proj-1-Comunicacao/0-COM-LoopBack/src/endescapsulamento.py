@@ -28,18 +28,27 @@ class Empacotamento():
         pacote += self.buildEOP()
         return(pacote)
 
+    def get_bin(self, x):
+        return format(x, 'b').zfill(16)
+
     def unpackage (self, packet):
-        payload = bytes([])
+    
         head = packet[0:3]
         payload_len = head[1:]
+        size = int.from_bytes(payload_len, byteorder = 'big')
         # numero = binascii.b2a_hex(payload_len) #isso da 1768 que é 5992 em hex
         # print(payload_len.decode('utf-8'))
-        palavra_byte = payload_len.decode('utf-8')
-        print(palavra_byte)
+        # palavra_byte = payload_len.decode('utf-8')
         # print(int(numero, 2))
-
+        # print(type(payload_len))
+        # print(int(payload_len, 2))
         # payload = packet[3:payload_len]
-
+        payload = packet[len(head): size]
+        # eop = packet[len(head) + size:] 
+        # final = "pandatata"
+        # finalByte = bytearray(final, encoding="ascii")
+        # print(binascii.hexlify(finalByte))
+        return payload
 
 teste = open('./imgs/panda.jpg', 'rb').read()
 #/Proj-1-Comunicacao/0-COM-LoopBack/src
@@ -52,9 +61,6 @@ alo.unpackage(build)
 #5992 em decimal é 5992, em hex é 1768 e o python entende como 0x17h
 
 # alo.unpackage(build)
-
-
-
 
 # print(binascii.b2a_hex(build[1:3]))
 

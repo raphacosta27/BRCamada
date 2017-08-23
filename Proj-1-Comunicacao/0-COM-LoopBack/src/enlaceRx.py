@@ -12,6 +12,7 @@ import time
 
 # Threads
 import threading
+import endescapsulamento
 
 # Class
 class RX(object):
@@ -27,6 +28,8 @@ class RX(object):
         self.threadStop  = False
         self.threadMutex = True
         self.READLEN     = 1024
+        self.found       = False
+
 
     def thread(self):
         """ RX thread, to send data in parallel with the code
@@ -78,7 +81,7 @@ class RX(object):
         """
         self.threadPause()
         b = self.buffer[:]
-        self.clearBuffer()
+        self.clearBuffer()threadStop
         self.threadResume()
         return(b)
 
@@ -105,3 +108,17 @@ class RX(object):
         """ Clear the reception buffer
         """
         self.buffer = b""
+
+
+    def searchForPacket(self):
+        endes = endescapsulamento.Empacotamento()
+
+        eop = endes.buildEOP()        
+        while(self.found = False):
+            if(self.buffer.find(eop) = -1):
+                self.found = True
+                return self.buffer[:eop]
+            else:
+                self.found = False
+                
+        

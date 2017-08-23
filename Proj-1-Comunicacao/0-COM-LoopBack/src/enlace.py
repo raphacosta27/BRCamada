@@ -12,6 +12,7 @@ import time
 
 # Construct Struct
 from construct import *
+import endescapsulamento
 
 # Interface Física
 from interfaceFisica import fisica
@@ -53,11 +54,16 @@ class enlace(object):
     def sendData(self, data):
         """ Send data over the enlace interface
         """
-        self.tx.sendBuffer(data)
+        endes = endescapsulamento.Empacotamento()
+        packet = endes.buildDataPacket(data)
 
-    def getData(self, size):
+        self.tx.sendBuffer(packet)
+
+    def getData(self):
         """ Get n data over the enlace interface
         Return the byte array and the size of the buffer
         """
-        data = self.rx.getNData(size)
+        package = RX.searchForPacket()
+        endes = endescapsulamento.Empacotamento()
+        data = endes.unpackage(package)
         return(data, len(data))

@@ -3,6 +3,7 @@ import time
 import interfaceServer
 from tkinter import *
 from PIL import Image, ImageTk
+import enlace
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -19,14 +20,12 @@ def main(window_server):
     # Ativa comunicacao
     com.enable()
 
-    txLen = 5992
-
     # Endereco da imagem a ser salva
     imageW = "./imgs/recebida.jpg"
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
-    rxBuffer, nRx = com.getData(txLen)
+    rxBuffer, nRx = com.getData()
 
 
     # log
