@@ -13,7 +13,7 @@ import time
 # Threads
 import threading
 import endescapsulamento
-
+import codecs
 # Class
 class RX(object):
     """ This class implements methods to handle the reception
@@ -39,6 +39,7 @@ class RX(object):
                 rxTemp, nRx = self.fisica.read(self.READLEN)
                 if (nRx > 0):
                     self.buffer += rxTemp
+                # print(self.buffer)
                 time.sleep(0.001)
 
     def threadStart(self):
@@ -107,19 +108,26 @@ class RX(object):
     def clearBuffer(self):
         """ Clear the reception buffer
         """
-        self.buffer = b""
+        self.buffer = b
 
 
     def searchForPacket(self):
         endes = endescapsulamento.Empacotamento()
+        eop = endes.buildEOP()
+        # teste = '70616e646174617461'
+        # print(teste.find(codecs.decode(endes.buildEOP))
+        # print(eop)
 
-        final = "padatata"
-        eop = bytearray(final, encoding="ascii")     
         while(self.found == False):
-            if(self.buffer.find(eop) != -1):
+            busca = self.buffer.find(eop)
+            if(busca != -1):
+                print(busca)
                 self.found = True
-                return self.buffer[:eop]
+                # print("Achei")
+                return self.buffer[:busca]
             else:
+                # print("nao achei")
                 self.found = False
+                continue
                 
         

@@ -2,6 +2,7 @@ from construct import *
 import os
 import binascii
 import struct
+import codecs
 
 class Empacotamento():
     
@@ -20,7 +21,6 @@ class Empacotamento():
         final = "pandatata"
         finalByte = bytearray(final, encoding="ascii")
         return binascii.hexlify(finalByte)
-        # return final.encode(encoding = "hex")
 
     def buildDataPacket(self, data):
         pacote = self.buildHead(len(data))
@@ -34,28 +34,34 @@ class Empacotamento():
     def unpackage (self, packet):
     
         head = packet[0:3]
+        print(len(head))
         payload_len = head[1:]
         size = int.from_bytes(payload_len, byteorder = 'big')
-        # numero = binascii.b2a_hex(payload_len) #isso da 1768 que é 5992 em hex
-        # print(payload_len.decode('utf-8'))
-        # palavra_byte = payload_len.decode('utf-8')
-        # print(int(numero, 2))
-        # print(type(payload_len))
-        # print(int(payload_len, 2))
-        # payload = packet[3:payload_len]
-        payload = packet[len(head): size]
-        # eop = packet[len(head) + size:] 
-        # final = "pandatata"
-        # finalByte = bytearray(final, encoding="ascii")
-        # print(binascii.hexlify(finalByte))
+
+        payload = packet[len(head):]
+        print(len(payload))
+
         return payload
 
-teste = open('./imgs/panda.jpg', 'rb').read()
-#/Proj-1-Comunicacao/0-COM-LoopBack/src
-# dados = bytes([])
-alo = Empacotamento()
-build = alo.buildDataPacket(teste)
-alo.unpackage(build)
+# found = False
+# teste = open('./imgs/panda.jpg', 'rb').read()
+# #/Proj-1-Comunicacao/0-COM-LoopBack/src
+# # dados = bytes([])
+# alo = Empacotamento()
+# build = alo.buildDataPacket(teste)
+
+# eop = codecs.decode(alo.buildEOP(), "hex")
+
+# while(found == False):
+#     if(build.found(eop)) != -1:
+#         print("achei")
+#         found = True
+#         print(build[:eop])
+#     else: 
+#         print("nao achei")
+
+
+# alo.unpackage(build)
 
 
 #5992 em decimal é 5992, em hex é 1768 e o python entende como 0x17h

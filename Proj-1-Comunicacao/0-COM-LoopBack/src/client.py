@@ -9,7 +9,7 @@ from tkinter import *
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM5"                  # Windows(variacao de)
+serialName = "COM3"                  # Windows(variacao de)
 
 def main(window_client, filename, root):
 
