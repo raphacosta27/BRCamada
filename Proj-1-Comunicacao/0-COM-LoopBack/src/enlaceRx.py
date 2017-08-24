@@ -81,7 +81,7 @@ class RX(object):
         """
         self.threadPause()
         b = self.buffer[:]
-        self.clearBuffer()threadStop
+        self.clearBuffer()
         self.threadResume()
         return(b)
 
@@ -113,9 +113,10 @@ class RX(object):
     def searchForPacket(self):
         endes = endescapsulamento.Empacotamento()
 
-        eop = endes.buildEOP()        
-        while(self.found = False):
-            if(self.buffer.find(eop) = -1):
+        final = "padatata"
+        eop = bytearray(final, encoding="ascii")     
+        while(self.found == False):
+            if(self.buffer.find(eop) != -1):
                 self.found = True
                 return self.buffer[:eop]
             else:

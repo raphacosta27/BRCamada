@@ -63,7 +63,7 @@ class enlace(object):
         """ Get n data over the enlace interface
         Return the byte array and the size of the buffer
         """
-        package = RX.searchForPacket()
+        package = self.rx.searchForPacket()
         endes = endescapsulamento.Empacotamento()
         data = endes.unpackage(package)
         return(data, len(data))
