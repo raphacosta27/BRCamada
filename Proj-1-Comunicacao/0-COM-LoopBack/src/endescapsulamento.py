@@ -9,12 +9,14 @@ class Empacotamento():
     def __init__(self):
         self.headSTART = 0xBB
         self.headStruct = Struct("start"/ Int8ub,
-                                "size" / Int16ub)
+                                "size" / Int16ub,
+                                "type"/ Int8ub)
 
-    def buildHead(self, dataLen):
+    def buildHead(self, dataLen, type):
         head = self.headStruct.build(dict(
         start = self.headSTART,
-        size = dataLen))
+        size = dataLen,
+        type = type))
         return (head)
 
     def buildEOP (self):
@@ -23,7 +25,7 @@ class Empacotamento():
         return binascii.hexlify(finalByte)
 
     def buildDataPacket(self, data):
-        pacote = self.buildHead(len(data))
+        pacote = self.buildHead(len(data), 0x00)
         pacote += data
         pacote += self.buildEOP()
         return(pacote)
@@ -42,6 +44,22 @@ class Empacotamento():
         print(len(payload))
 
         return payload
+
+    def buildSynPacket(self, data):
+        p = self.buildHead(len(data), 0x10)
+        p += self.buildEOP()
+        return(p)
+
+    def buildAckPacket(self, data):
+        p = self.buildHead(len(data), 0x11)
+        p += self.buildEOP()
+        return(p)
+
+    def buildNackPacket(self, data):
+        p = self.buildHead(len(data), 0x12)
+        p += self.buildEOP()
+        return(p)
+
 
 # found = False
 # teste = open('./imgs/panda.jpg', 'rb').read()
