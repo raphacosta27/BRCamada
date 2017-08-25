@@ -34,7 +34,6 @@ class Empacotamento():
         return format(x, 'b').zfill(16)
 
     def unpackage (self, packet):
-    
         head = packet[0:3]
         print(len(head))
         payload_len = head[1:]
