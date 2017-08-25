@@ -6,11 +6,19 @@ import codecs
 
 class Empacotamento():
     
+    class HeadTypes():
+        
+        def __init__(self):
+            self.SYN = 0x10
+            self.ACK = 0x11
+            self.NACK = 0x12
+    
     def __init__(self):
         self.headSTART = 0xBB
         self.headStruct = Struct("start"/ Int8ub,
                                 "size" / Int16ub,
                                 "type"/ Int8ub)
+        self.HEADTYPE = self.HeadTypes()
 
     def buildHead(self, dataLen, type):
         head = self.headStruct.build(dict(
@@ -45,17 +53,17 @@ class Empacotamento():
         return payload
 
     def buildSynPacket(self, data):
-        p = self.buildHead(len(data), 0x10)
+        p = self.buildHead(len(data), self.HEADTYPE.SYN)
         p += self.buildEOP()
         return(p)
 
     def buildAckPacket(self, data):
-        p = self.buildHead(len(data), 0x11)
+        p = self.buildHead(len(data), self.HEADTYPE.ACK)
         p += self.buildEOP()
         return(p)
 
     def buildNackPacket(self, data):
-        p = self.buildHead(len(data), 0x12)
+        p = self.buildHead(len(data), self.HEADTYPE.NACK)
         p += self.buildEOP()
         return(p)
 
