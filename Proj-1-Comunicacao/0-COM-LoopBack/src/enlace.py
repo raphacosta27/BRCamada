@@ -13,6 +13,7 @@ import time
 # Construct Struct
 from construct import *
 import endescapsulamento
+import getType
 
 # Interface Física
 from interfaceFisica import fisica
@@ -67,3 +68,77 @@ class enlace(object):
         endes = endescapsulamento.Empacotamento()
         data = endes.unpackage(package)
         return(data, len(data))
+
+    def receive(self):
+        endes = endescapsulamento.Empacotamento()
+        sync = False
+        while sync == False:
+            #iniciar timer para esperar um syn
+            print(self.rx.getBufferLen())
+            if self.rx.getBufferLen() != 0:
+                packet = self.getData()[0]
+                packetType = getType.getType(packet)
+                if packet.getPacketType == 'comando':
+                    if packet.getCommandType == 'SYN':
+                        self.sendData(endes.buildAckPacket)
+                        self.sendData(endes.buildSynPacket)
+                        #outro timer esprando um ack do client
+                        packet2 = self.getData()[0]
+                        if len(packet2) != 0:
+                            packetType2 = getType.getType(packet)
+                            if packetType2.getPacketType == 'comando':
+                                if packetType2.getCommandType == 'ACK':
+                                    sync = True
+                                    return True
+                                else:
+                                    print("nao recebeu ultimo ack do server")
+                                    continue
+                            else:
+                                print("server nao mandou ack")
+                                continue
+                        else:
+                            print("nao recebeu nenhum ack do server, reiniciando")
+                            continue
+                    else:
+                        print("server nao mandou syn")
+                        continue
+                else:
+                    print("nao recebeu")
+                    continue
+            else:
+                print("pacote vazio, procurar novamente")
+                continue
+
+    def conecta(self):
+        endes = endescapsulamento.Empacotamento()
+        sync = False
+        while sync == False:
+            synPacket = endes.buildSynPacket()
+            self.sendData(synPacket)
+            #inicia timer esperando um ack e um syn
+            packet = self.getData()[0]
+            if len(packet) != 0:
+                packetType = getType.getType(packet)
+                if packetType.getPacketType == 'comando':
+                    if packetType.getCommandType == 'ACK':
+                        #iniciar timer para esperar um SYN do server
+                        ackPacket = endes.buildAckPacket()
+                        self.sendData(ackPacket)
+                        sync = True
+                        return True
+                    else:
+                        print("nao recebeu ack e syn do server")
+                        continue
+                else:
+                    print("nao é um comando")
+                    continue
+            else:
+                print("pacote vazio, reiniciando")
+        
+                        
+
+
+
+        
+                    
+                    

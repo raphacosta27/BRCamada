@@ -7,9 +7,9 @@ from tkinter import *
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-#serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+serialName = "/dev/ttyACM1"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM3"                  # Windows(variacao de)
+#serialName = "COM3"                  # Windows(variacao de)
 
 def main(window_client, filename, root):
 
@@ -23,6 +23,10 @@ def main(window_client, filename, root):
     imageR = filename
 
     start_time = time.time()
+
+    print("iniciando comunicação...")
+    com.conecta()
+    print("iniciou")
 
     # Log
     print("-------------------------")
@@ -41,6 +45,9 @@ def main(window_client, filename, root):
     txBuffer = open(imageR, 'rb').read()
     txLen    = len(txBuffer)
     print(txLen)
+
+    #conectando
+    enlace.bind()
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+    #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #####################################################
 # Camada Física da Computação
@@ -14,6 +14,8 @@ import time
 import threading
 import endescapsulamento
 import codecs
+import getType
+
 # Class
 class RX(object):
     """ This class implements methods to handle the reception
@@ -118,16 +120,23 @@ class RX(object):
         # print(teste.find(codecs.decode(endes.buildEOP))
         # print(eop)
 
-        while(self.found == False):
-            busca = self.buffer.find(eop)
-            if(busca != -1):
-                print(busca)
-                self.found = True
-                # print("Achei")
-                return self.buffer[:busca]
-            else:
-                # print("nao achei")
-                self.found = False
-                continue
+        # while(self.found == False):
+        busca = self.buffer.find(eop)
+        if(busca != -1):
+            print(busca)
+            self.found = True
+            # print("Achei")
+            return self.buffer[:busca]
+        else:
+            # print("nao achei")
+            self.found = False
+        
                 
         
+    def packetType(self):
+        packet = searchForPacket()
+        p = getType.getType(packet)
+        if p.getPacketType == 'comando':
+            return p.getCommandType
+        else:
+            return p.getPacketType

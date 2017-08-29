@@ -1,7 +1,8 @@
-class getType(pacote):
-    self.pacote = pacote
-    self.head = pacote[0:4]
-    self.tipo = self.head[3]
+class getType():
+    def __init__(self, pacote):            
+        self.pacote = pacote
+        self.head = pacote[0:4]
+        self.tipo = self.head[3]
 
     def getPacketType(self):
         # retorna "Comando", "Dado" ou "ERRO

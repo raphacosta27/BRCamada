@@ -9,9 +9,9 @@ import enlace
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-#serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM3"                  # Windows(variacao de)
+#serialName = "COM3"                  # Windows(variacao de)
 
 def main(window_server):
 
@@ -23,6 +23,9 @@ def main(window_server):
     # Endereco da imagem a ser salva
     imageW = "./imgs/recebida.jpg"
 
+    print("Estabelecendo conexão...")
+    com.receive()
+    print("conectou")
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
     rxBuffer, nRx = com.getData()

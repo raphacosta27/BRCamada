@@ -19,7 +19,6 @@ class Empacotamento():
                                 "size" / Int16ub,
                                 "type"/ Int8ub)
         self.HEADTYPE = self.HeadTypes()
-
     def buildHead(self, dataLen, type):
         head = self.headStruct.build(dict(
         start = self.headSTART,
@@ -52,18 +51,18 @@ class Empacotamento():
 
         return payload
 
-    def buildSynPacket(self, data):
-        p = self.buildHead(len(data), self.HEADTYPE.SYN)
+    def buildSynPacket(self):
+        p = self.buildHead(0x00, self.HEADTYPE.SYN)
         p += self.buildEOP()
         return(p)
 
-    def buildAckPacket(self, data):
-        p = self.buildHead(len(data), self.HEADTYPE.ACK)
+    def buildAckPacket(self):
+        p = self.buildHead(0x00, self.HEADTYPE.ACK)
         p += self.buildEOP()
         return(p)
 
-    def buildNackPacket(self, data):
-        p = self.buildHead(len(data), self.HEADTYPE.NACK)
+    def buildNackPacket(self):
+        p = self.buildHead(0x00, self.HEADTYPE.NACK)
         p += self.buildEOP()
         return(p)
 
