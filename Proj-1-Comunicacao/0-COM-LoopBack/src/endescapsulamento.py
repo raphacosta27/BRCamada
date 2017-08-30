@@ -3,6 +3,7 @@ import os
 import binascii
 import struct
 import codecs
+import time
 
 class Empacotamento():
     
@@ -41,6 +42,7 @@ class Empacotamento():
         return format(x, 'b').zfill(16)
 
     def unpackage (self, packet):
+        #print(packet)
         head = packet[0:4]
         payload_len = head[1:3]
         tipo = head[3]
@@ -69,8 +71,10 @@ class Empacotamento():
 
     def getPacketLen(self, packet):
         head = packet[0:4]
+        time.sleep(1)
         payload_len = head[1:3]
         size = int.from_bytes(payload_len, byteorder = 'big')
+        print(size)
         return size
 
 

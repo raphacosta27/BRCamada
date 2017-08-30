@@ -65,9 +65,11 @@ class enlace(object):
         Return the byte array and the size of the buffer
         """
 
-        package = self.rx.searchForPacket() 
+        package = self.rx.searchForPacket()
+        print("alo"+str(package)) 
         endes = endescapsulamento.Empacotamento()
         data = endes.unpackage(package)
+        
         return(data)
 
     def receive(self):
@@ -75,7 +77,7 @@ class enlace(object):
         sync = False
         while sync == False:
             #iniciar timer para esperar um syn
-            time.sleep(2)
+            time.sleep(1)
             if self.rx.getBufferLen() != 0:
                 print("recebi algo")
                 packet = self.getData()
@@ -97,6 +99,7 @@ class enlace(object):
                                 packetType2.getCommandType()
                                 if packetType2.getCommandType() == 'ACK':
                                     sync = True
+                                    time.sleep(3)
                                     return True
                                 else:
                                     print("nao recebeu ultimo ack do server")

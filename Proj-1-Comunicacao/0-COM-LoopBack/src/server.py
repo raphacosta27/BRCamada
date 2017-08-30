@@ -10,7 +10,7 @@ import endescapsulamento
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "/dev/ttyACM2"           # Ubuntu (variacao de)
+serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
@@ -32,15 +32,18 @@ def main(window_server):
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
+    #print(com.tx.buffer)
+    a = com.rx.buffer
     print(com.rx.buffer)
+    time.sleep(3)
     rxBuffer = com.getData()
 
 
     # log
     start_receiving_time = time.time()
-    print ("Lido              {} bytes ".format(endes.getPacketLen(rxBuffer)))
+    #print ("Lido              {} bytes ".format(endes.getPacketLen(a)))
 
-    status_label1 = Label(window_server, text ="Lido              {} bytes ".format(endes.getPacketLen(rxBuffer)))
+    status_label1 = Label(window_server, text ="Lido              {} bytes ".format(endes.getPacketLen(a)))
     status_label1.grid(row = 2, column =0, sticky = W)
 
     # Salva imagem recebida em arquivo
