@@ -80,17 +80,22 @@ class enlace(object):
                 print("recebi algo")
                 packet = self.getData()
                 packetType = getType.getType(packet)
-                packetType.getPacketType()
-                if packetType.getPacketType == 'comando':
-                    if packet.getCommandType == 'SYN':
-                        self.sendData(endes.buildAckPacket)
-                        self.sendData(endes.buildSynPacket)
+                if packetType.getPacketType() == 'comando':
+                    if packetType.getCommandType() == 'SYN':
+                        print("é um syn")
+                        self.sendData(endes.buildAckPacket())
+                        time.sleep(3)
+                        print("alo")
+                        self.sendData(endes.buildSynPacket())
                         #outro timer esprando um ack do client
+                        time.sleep(2)
                         packet2 = self.getData()
+                        print(packet2)
                         if len(packet2) != 0:
-                            packetType2 = getType.getType(packet)
-                            if packetType2.getPacketType == 'comando':
-                                if packetType2.getCommandType == 'ACK':
+                            packetType2 = getType.getType(packet2)
+                            if packetType2.getPacketType() == 'comando':
+                                packetType2.getCommandType()
+                                if packetType2.getCommandType() == 'ACK':
                                     sync = True
                                     return True
                                 else:
@@ -126,13 +131,23 @@ class enlace(object):
             if bufferLen != 0:
                 packet = self.getData()
                 packetType = getType.getType(packet)
-                if packetType.getPacketType == 'comando':
-                    if packetType.getCommandType == 'ACK':
-                        #iniciar timer para esperar um SYN do server
-                        ackPacket = endes.buildAckPacket()
-                        self.sendData(ackPacket)
-                        sync = True
-                        return True
+                if packetType.getPacketType() == 'comando':
+                    if packetType.getCommandType() == 'ACK':
+                        print("recebe ack")
+                        
+                        time.sleep(3)
+                        packet = self.getData()
+                        packetType = getType.getType(packet)    
+                        if packetType.getPacketType() == 'comando':
+                            if packetType.getCommandType() == 'SYN':    
+                                print('recebeu SYN')
+                                #iniciar timer para esperar um SYN do server
+                                ackPacket = endes.buildAckPacket()
+                                print(self.rx.buffer)
+                                self.sendData(ackPacket)
+                                print(self.rx.buffer)
+                                sync = True
+                                return True
                     else:
                         print("nao recebeu ack e syn do server")
                         continue

@@ -50,7 +50,6 @@ def main(window_client, filename, root):
     print(txLen)
 
     #conectando
-    enlace.bind()
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))

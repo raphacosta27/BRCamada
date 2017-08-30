@@ -4,6 +4,7 @@ import interfaceServer
 from tkinter import *
 from PIL import Image, ImageTk
 import enlace
+import endescapsulamento
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -14,6 +15,8 @@ serialName = "/dev/ttyACM2"           # Ubuntu (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
 def main(window_server):
+
+    endes = endescapsulamento.Empacotamento()
 
     # Inicializa enlace
     com = enlace.enlace(serialName)
@@ -29,14 +32,15 @@ def main(window_server):
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
-    rxBuffer, nRx = com.getData()
+    print(com.rx.buffer)
+    rxBuffer = com.getData()
 
 
     # log
     start_receiving_time = time.time()
-    print ("Lido              {} bytes ".format(nRx))
+    print ("Lido              {} bytes ".format(endes.getPacketLen(rxBuffer)))
 
-    status_label1 = Label(window_server, text ="Lido              {} bytes ".format(nRx))
+    status_label1 = Label(window_server, text ="Lido              {} bytes ".format(endes.getPacketLen(rxBuffer)))
     status_label1.grid(row = 2, column =0, sticky = W)
 
     # Salva imagem recebida em arquivo

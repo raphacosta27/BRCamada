@@ -67,6 +67,12 @@ class Empacotamento():
         p += self.buildEOP()
         return(p)
 
+    def getPacketLen(self, packet):
+        head = packet[0:4]
+        payload_len = head[1:3]
+        size = int.from_bytes(payload_len, byteorder = 'big')
+        return size
+
 
 # found = False
 # teste = open('./imgs/panda.jpg', 'rb').read()
