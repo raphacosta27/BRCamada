@@ -41,15 +41,16 @@ class Empacotamento():
         return format(x, 'b').zfill(16)
 
     def unpackage (self, packet):
-        head = packet[0:3]
-        print(len(head))
-        payload_len = head[1:]
+        head = packet[0:4]
+        payload_len = head[1:3]
+        tipo = head[3]
         size = int.from_bytes(payload_len, byteorder = 'big')
-
         payload = packet[len(head):]
-        print(len(payload))
 
-        return payload
+        if size == 0:
+            return head
+        else:
+            return payload
 
     def buildSynPacket(self):
         p = self.buildHead(0x00, self.HEADTYPE.SYN)

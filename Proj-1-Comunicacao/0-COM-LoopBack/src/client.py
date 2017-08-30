@@ -8,7 +8,7 @@ import endescapsulamento
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+serialName = "/dev/ttyACM1"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
@@ -19,6 +19,9 @@ def main(window_client, filename, root):
 
     # Ativa comunicacao
     com.enable()
+    
+    #conecta com server
+    com.conecta()
 
     # Endereco da imagem a ser transmitida
     imageR = filename
@@ -26,7 +29,6 @@ def main(window_client, filename, root):
     start_time = time.time()
 
     print("iniciando comunicação...")
-    com.conecta()
     print("iniciou")
 
     # Log

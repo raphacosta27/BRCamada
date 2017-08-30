@@ -120,13 +120,20 @@ class RX(object):
         # print(teste.find(codecs.decode(endes.buildEOP))
         # print(eop)
 
+
+        # stop and resume thread
         # while(self.found == False):
         busca = self.buffer.find(eop)
         if(busca != -1):
-            print(busca)
+            self.threadPause()
+            # print(busca)
             self.found = True
             # print("Achei")
-            return self.buffer[:busca]
+            packet = self.buffer[:busca]
+            self.buffer = self.buffer[busca+len(eop):]
+            # print(self.buffer.getBufferLen())
+            self.threadResume()
+            return packet
         else:
             # print("nao achei")
             self.found = False

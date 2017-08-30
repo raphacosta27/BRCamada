@@ -64,10 +64,11 @@ class enlace(object):
         """ Get n data over the enlace interface
         Return the byte array and the size of the buffer
         """
-        package = self.rx.searchForPacket()
+
+        package = self.rx.searchForPacket() 
         endes = endescapsulamento.Empacotamento()
         data = endes.unpackage(package)
-        return(data, len(data))
+        return(data)
 
     def receive(self):
         endes = endescapsulamento.Empacotamento()
@@ -75,18 +76,17 @@ class enlace(object):
         while sync == False:
             #iniciar timer para esperar um syn
             time.sleep(2)
-            print(self.rx.buffer)
-            print("search" + str(self.rx.searchForPacket()))
             if self.rx.getBufferLen() != 0:
                 print("recebi algo")
-                packet = self.getData()[0]
+                packet = self.getData()
                 packetType = getType.getType(packet)
-                if packet.getPacketType == 'comando':
+                packetType.getPacketType()
+                if packetType.getPacketType == 'comando':
                     if packet.getCommandType == 'SYN':
                         self.sendData(endes.buildAckPacket)
                         self.sendData(endes.buildSynPacket)
                         #outro timer esprando um ack do client
-                        packet2 = self.getData()[0]
+                        packet2 = self.getData()
                         if len(packet2) != 0:
                             packetType2 = getType.getType(packet)
                             if packetType2.getPacketType == 'comando':
@@ -118,13 +118,13 @@ class enlace(object):
         while sync == False:
             synPacket = endes.buildSynPacket()
             self.sendData(synPacket)
-            print("lenBuffer" + str(self.tx.getBufferLen())) 
-            print("rxBuffer" + str(self.rx.getBufferLen()))
             time.sleep(2)
+            # print("lenBuffer" + str(self.tx.getBufferLen())) 
             #inicia timer esperando um ack e um syn
             bufferLen = self.rx.getBufferLen()
+            print(bufferLen)
             if bufferLen != 0:
-                packet = self.getData()[0]
+                packet = self.getData()
                 packetType = getType.getType(packet)
                 if packetType.getPacketType == 'comando':
                     if packetType.getCommandType == 'ACK':
