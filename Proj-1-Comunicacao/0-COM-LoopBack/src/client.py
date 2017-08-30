@@ -2,6 +2,7 @@ from enlace import *
 import time
 import interfaceClient
 from tkinter import *
+import endescapsulamento
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -51,7 +52,9 @@ def main(window_client, filename, root):
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
-    com.sendData(txBuffer)
+    endes = endescapsulamento.Empacotamento()
+    packet = endes.buildDataPacket(txBuffer)
+    com.sendData(packet)
 
     new_label2 = Label(window_client, text="Transmitindo .... {} bytes".format(txLen))
     new_label2.grid(row=3, column=0, sticky=W)

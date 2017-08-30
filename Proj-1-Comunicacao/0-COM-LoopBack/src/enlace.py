@@ -55,10 +55,10 @@ class enlace(object):
     def sendData(self, data):
         """ Send data over the enlace interface
         """
-        endes = endescapsulamento.Empacotamento()
-        packet = endes.buildDataPacket(data)
+        # endes = endescapsulamento.Empacotamento()
+        # packet = endes.buildDataPacket(data)
 
-        self.tx.sendBuffer(packet)
+        self.tx.sendBuffer(data)
 
     def getData(self):
         """ Get n data over the enlace interface
@@ -74,8 +74,10 @@ class enlace(object):
         sync = False
         while sync == False:
             #iniciar timer para esperar um syn
+            time.sleep(2)
             print(self.rx.getBufferLen())
             if self.rx.getBufferLen() != 0:
+                print("recebi algo")
                 packet = self.getData()[0]
                 packetType = getType.getType(packet)
                 if packet.getPacketType == 'comando':
@@ -115,9 +117,12 @@ class enlace(object):
         while sync == False:
             synPacket = endes.buildSynPacket()
             self.sendData(synPacket)
+            print(self.tx.getBufferLen()) 
+            time.sleep(2)
             #inicia timer esperando um ack e um syn
-            packet = self.getData()[0]
-            if len(packet) != 0:
+            bufferLen = self.rx.getBufferLen()
+            if bufferLen != 0:
+                packet = self.getData()[0]
                 packetType = getType.getType(packet)
                 if packetType.getPacketType == 'comando':
                     if packetType.getCommandType == 'ACK':
