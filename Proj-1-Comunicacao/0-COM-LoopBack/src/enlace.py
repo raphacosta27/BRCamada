@@ -75,7 +75,8 @@ class enlace(object):
         while sync == False:
             #iniciar timer para esperar um syn
             time.sleep(2)
-            print(self.rx.getBufferLen())
+            print(self.rx.buffer)
+            print("search" + str(self.rx.searchForPacket()))
             if self.rx.getBufferLen() != 0:
                 print("recebi algo")
                 packet = self.getData()[0]
@@ -117,7 +118,8 @@ class enlace(object):
         while sync == False:
             synPacket = endes.buildSynPacket()
             self.sendData(synPacket)
-            print(self.tx.getBufferLen()) 
+            print("lenBuffer" + str(self.tx.getBufferLen())) 
+            print("rxBuffer" + str(self.rx.getBufferLen()))
             time.sleep(2)
             #inicia timer esperando um ack e um syn
             bufferLen = self.rx.getBufferLen()
