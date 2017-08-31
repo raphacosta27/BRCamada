@@ -7,8 +7,10 @@ class getType():
     def getPacketType(self):
         # retorna "Comando", "Dado" ou "ERRO
         if self.tipo == 0x00:
+            print("dado")
             return 'dado'
         elif self.tipo == 0x10 or self.tipo == 0x11 or self.tipo == 0x12:
+            print("comando")
             return 'comando'
         else:
             return 'ERRO'

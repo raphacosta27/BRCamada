@@ -15,7 +15,7 @@ serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 
 def main(window_client, filename, root):
 
-    sent == False
+    sent = False
 
     # Inicializa enlace
     com = enlace(serialName)
@@ -56,9 +56,24 @@ def main(window_client, filename, root):
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
-    endes = endescapsulamento.Empacotamento()
-    packet = endes.buildDataPacket(txBuffer)
-    com.sendData(packet)
+    while sent == False:
+        endes = endescapsulamento.Empacotamento()
+        packet = endes.buildDataPacket(txBuffer)    
+        com.sendData(packet)
+        time.sleep(2)
+        if com.rx.getBufferLen() != 0 :
+            packet = com.getData()
+            if packet != 0: 
+                packetType = getType.getType(packet)
+                if packetType.getPacketType() == 'comando':
+                    if packetType.getCommandType() == 'ACK':
+                        sent = True
+                    elif packetType.getCommandType() == 'NACK':
+                        print("Não veio")
+                        continue
+        else:
+            print('ainda nao chegou o ack')
+            continue
 
     new_label2 = Label(window_client, text="Transmitindo .... {} bytes".format(txLen))
     new_label2.grid(row=3, column=0, sticky=W)
@@ -75,21 +90,6 @@ def main(window_client, filename, root):
     # interfaceClient.MyFrame.finished(window)
     elapsed_time = time.time() - start_time
     print("tempo de transmissao " + str(elapsed_time))
-    while sent == False:
-        endes = endescapsulamento.Empacotamento()
-        com.sendData(packet)
-        time.sleep(2)
-        packet = com.getData()
-        if packet != 0:
-            packetType = getType.getType(packet)
-            if packetType.getPacketType() == 'command':
-                if packetType.getCommandType() == 'ACK':
-                    sent = True
-                elif packetType.getCommandType() == 'NACK':
-                    print("Não veio")
-                    continue
-
-
     new_label2 = Label(window_client, text="tempo de transmissao " + str(elapsed_time))
     new_label2.grid(row=4, column=0, sticky=W)
 
