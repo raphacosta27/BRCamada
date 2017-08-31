@@ -84,7 +84,7 @@ class enlace(object):
                 packetType = getType.getType(packet)
                 if packetType.getPacketType() == 'comando':
                     if packetType.getCommandType() == 'SYN':
-                        print("Foi recebido o primeiro Syn")
+                        print("é um syn")
                         self.sendData(endes.buildAckPacket())
                         time.sleep(3)
                         print("alo")
@@ -146,7 +146,7 @@ class enlace(object):
                                 print('recebeu SYN')
                                 #iniciar timer para esperar um SYN do server
                                 ackPacket = endes.buildAckPacket()
-                                print(self.rx.buffer)
+                                print(self.rx.buffer) 
                                 self.sendData(ackPacket)
                                 print(self.rx.buffer)
                                 sync = True
