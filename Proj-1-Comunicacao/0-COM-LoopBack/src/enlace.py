@@ -146,11 +146,7 @@ class enlace(object):
                                 print('Recebendo Syn')
                                 #iniciar timer para esperar um SYN do server
                                 ackPacket = endes.buildAckPacket()
-<<<<<<< HEAD
-                                print(self.rx.buffer) 
-=======
                                 # print(self.rx.buffer)
->>>>>>> 2538a3a23b4ec8f96fe64fb4b745361f437bd37a
                                 self.sendData(ackPacket)
                                 print("Mandando Ack")
                                 # print(self.rx.buffer)
