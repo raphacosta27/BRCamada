@@ -3,6 +3,7 @@ import time
 import interfaceClient
 from tkinter import *
 import endescapsulamento
+import getType
 
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
@@ -13,6 +14,8 @@ serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
 def main(window_client, filename, root):
+
+    sent == False
 
     # Inicializa enlace
     com = enlace(serialName)
@@ -72,6 +75,20 @@ def main(window_client, filename, root):
     # interfaceClient.MyFrame.finished(window)
     elapsed_time = time.time() - start_time
     print("tempo de transmissao " + str(elapsed_time))
+    while sent == False:
+        endes = endescapsulamento.Empacotamento()
+        com.sendData(packet)
+        time.sleep(2)
+        packet = com.getData()
+        if packet != 0:
+            packetType = getType.getType(packet)
+            if packetType.getPacketType() == 'command':
+                if packetType.getCommandType() == 'ACK':
+                    sent = True
+                elif packetType.getCommandType() == 'NACK':
+                    print("Não veio")
+                    continue
+
 
     new_label2 = Label(window_client, text="tempo de transmissao " + str(elapsed_time))
     new_label2.grid(row=4, column=0, sticky=W)
