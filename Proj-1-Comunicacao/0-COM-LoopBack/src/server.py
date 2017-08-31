@@ -36,6 +36,7 @@ def main(window_server):
     print ("Recebendo dados .... ")
     #print(com.tx.buffer)
     # print(com.rx.buffer)
+    a = com.rx.buffer
     time.sleep(3)
     while received == False:
         if com.rx.getBufferLen == 0:
@@ -43,12 +44,11 @@ def main(window_server):
             com.sendData(nackPacket)
         else:
             rxBuffer = com.getData()
-            a = com.rx.buffer
             print("recebi pacote")
+
             ackPacket = endes.buildAckPacket()
             com.sendData(ackPacket)
             break
-
 
     # log
     start_receiving_time = time.time()

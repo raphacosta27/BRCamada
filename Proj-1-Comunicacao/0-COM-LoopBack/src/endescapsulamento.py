@@ -74,7 +74,7 @@ class Empacotamento():
         time.sleep(1)
         payload_len = head[1:3]
         size = int.from_bytes(payload_len, byteorder = 'big')
-        print(size)
+        print(payload_len)
         return size
 
  
