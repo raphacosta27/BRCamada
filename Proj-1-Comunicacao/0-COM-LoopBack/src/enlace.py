@@ -84,7 +84,7 @@ class enlace(object):
                 packetType = getType.getType(packet)
                 if packetType.getPacketType() == 'comando':
                     if packetType.getCommandType() == 'SYN':
-                        print("é um syn")
+                        print("Foi recebido o primeiro Syn")
                         self.sendData(endes.buildAckPacket())
                         time.sleep(3)
                         print("alo")

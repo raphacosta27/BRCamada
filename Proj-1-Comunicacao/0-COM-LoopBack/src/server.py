@@ -10,11 +10,13 @@ import endescapsulamento
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+serialName = "/dev/ttyACM1"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
 def main(window_server):
+    
+    received = False
 
     endes = endescapsulamento.Empacotamento()
 
@@ -33,10 +35,19 @@ def main(window_server):
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
     #print(com.tx.buffer)
-    a = com.rx.buffer
     print(com.rx.buffer)
     time.sleep(3)
-    rxBuffer = com.getData()
+    while received == False:
+        if com.rx.getBufferLen == 0:
+            nackPacket = endes.buildNackPacket()
+            com.sendData(nackPacket)
+        else:
+            rxBuffer = com.getData()
+            a = com.rx.buffer
+            print("recebi pacote")
+            ackPacket = endes.buildAckPacket()
+            com.sendData(ackPacket)
+            break
 
 
     # log
