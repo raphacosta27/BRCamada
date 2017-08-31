@@ -35,7 +35,7 @@ def main(window_server):
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
     #print(com.tx.buffer)
-    print(com.rx.buffer)
+    # print(com.rx.buffer)
     time.sleep(3)
     while received == False:
         if com.rx.getBufferLen == 0:
