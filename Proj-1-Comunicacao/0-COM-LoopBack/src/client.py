@@ -69,10 +69,10 @@ def main(window_client, filename, root):
                     if packetType.getCommandType() == 'ACK':
                         sent = True
                     elif packetType.getCommandType() == 'NACK':
-                        print("Não veio")
+                        print("Pacote não recebido, reenviando")
                         continue
         else:
-            print('ainda nao chegou o ack')
+            print('Aguardando confirmação de recebimento de pacote')
             continue
 
     new_label2 = Label(window_client, text="Transmitindo .... {} bytes".format(txLen))
