@@ -77,7 +77,7 @@ class Empacotamento():
         print(size)
         return size
 
-
+ 
 # found = False
 # teste = open('./imgs/panda.jpg', 'rb').read()
 # #/Proj-1-Comunicacao/0-COM-LoopBack/src

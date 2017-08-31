@@ -9,7 +9,7 @@ import getType
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+serialName = "/dev/ttyACM1"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
@@ -54,12 +54,14 @@ def main(window_client, filename, root):
 
     #conectando
 
+    endes = endescapsulamento.Empacotamento()
+    packet = endes.buildDataPacket(txBuffer)    
+    com.sendData(packet)
+
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
     while sent == False:
-        endes = endescapsulamento.Empacotamento()
-        packet = endes.buildDataPacket(txBuffer)    
-        com.sendData(packet)
+        
         time.sleep(2)
         if com.rx.getBufferLen() != 0 :
             packet = com.getData()
@@ -70,6 +72,9 @@ def main(window_client, filename, root):
                         sent = True
                     elif packetType.getCommandType() == 'NACK':
                         print("Pacote não recebido, reenviando")
+                        endes = endescapsulamento.Empacotamento()
+                        packet = endes.buildDataPacket(txBuffer)    
+                        com.sendData(packet)
                         continue
         else:
             print('Aguardando confirmação de recebimento de pacote')

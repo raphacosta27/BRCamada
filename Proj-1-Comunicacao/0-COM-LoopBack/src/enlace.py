@@ -151,9 +151,14 @@ class enlace(object):
                                 print("Mandando Ack")
                                 # print(self.rx.buffer)
                                 sync = True
+                                time.sleep(2)
                                 return True
+                            else:
+                                print("nao recebeu SYN do server")
+                                continue
+                                
                     else:
-                        print("nao recebeu ack e syn do server")
+                        print("nao recebeu ACK do server")
                         continue
                 else:
                     print("nao é um comando")
