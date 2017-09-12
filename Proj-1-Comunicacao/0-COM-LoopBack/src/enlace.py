@@ -38,6 +38,7 @@ class enlace(object):
         self.rx          = RX(self.fisica)
         self.tx          = TX(self.fisica)
         self.connected   = False
+        self.endes = endescapsulamento.Empacotamento()
 
     def enable(self):
         """ Enable reception and transmission
@@ -71,13 +72,11 @@ class enlace(object):
         """
 
         package = self.rx.searchForPacket()
-        endes = endescapsulamento.Empacotamento()
-        data = endes.unpackage(package)
+        data = self.endes.unpackage(package)
         
         return(data)
 
     def receive(self):
-        endes = endescapsulamento.Empacotamento()
         sync = False
         while sync == False:
             #iniciar timer para esperar um syn
@@ -89,10 +88,10 @@ class enlace(object):
                 if packetType.getPacketType() == 'comando':
                     if packetType.getCommandType() == 'SYN':
                         print("é um syn")
-                        self.sendData(endes.buildAckPacket())
+                        self.sendData(self.endes.buildAckPacket())
                         print("Enviando Ack")
                         time.sleep(3)
-                        self.sendData(endes.buildSynPacket())
+                        self.sendData(self.endes.buildSynPacket())
                         print("Enviando Syn")
                         #outro timer esprando um ack do client
                         time.sleep(2)
@@ -125,10 +124,9 @@ class enlace(object):
                 continue
 
     def conecta(self):
-        endes = endescapsulamento.Empacotamento()
         sync = False
         while sync == False:
-            synPacket = endes.buildSynPacket()
+            synPacket = self.endes.buildSynPacket()
             self.sendData(synPacket)
             print("Mandando Syn")
 
@@ -154,7 +152,7 @@ class enlace(object):
                             if packetType.getCommandType() == 'SYN':    
                                 print('Recebendo Syn')
                                 #iniciar timer para esperar um SYN do server
-                                ackPacket = endes.buildAckPacket()
+                                ackPacket = self.endes.buildAckPacket()
                                 # print(self.rx.buffer)
                                 self.sendData(ackPacket)
                                 print("Mandando Ack")
@@ -199,30 +197,30 @@ class enlace(object):
 
     def confirm_server(self):
         received = False
-        endes = endescapsulamento.Empacotamento()
-        while received == False:
+        # while received == False:
             if self.rx.getBufferLen == 0:
-                nackPacket = endes.buildNackPacket()
+                nackPacket = self.endes.buildNackPacket()
                 self.sendData(nackPacket)
+                return False
             else:
-                rxBuffer = self.getData()
+                # rxBuffer = self.getData()
                 print("recebi pacote")
-                ackPacket = endes.buildAckPacket()
+                ackPacket = self.endes.buildAckPacket()
                 self.sendData(ackPacket)
-                received = True
+                # received = True
+                return True
                 # break
-        received = False
-        return rxBuffer
+        # received = False
+        # return rxBuffer
 
 
     def parsePacket(self, payload):
-        endes = endescapsulamento.Empacotamento()
         offset = 0
         nPacotes = math.ceil(len(payload)/2048)
         packetCounter = 0
         while packetCounter <= nPacotes:
             if (len(payload) - offset) >= 2048:
-                pacote = endes.buildDataPacket((payload[offset:offset+2048]),packetCounter,nPacotes)
+                pacote = self.endes.buildDataPacket((payload[offset:offset+2048]),packetCounter,nPacotes)
                 self.sendData(pacote)
                 confirmacao = self.confirm_client()
                 if confirmacao == True:    
@@ -231,7 +229,7 @@ class enlace(object):
                 else:
                     continue
             else:
-                pacote = endes.buildDataPacket((payload[offset:]),packetCounter,nPacotes)
+                pacote = self.endes.buildDataPacket((payload[offset:]),packetCounter,nPacotes)
                 self.sendData(pacote)
                 confirmacao = self.confirm_client()
                 if confirmacao == True:    
@@ -240,6 +238,31 @@ class enlace(object):
                     continue
         
     def receive_packets(self):
+        imagem = bytearray()
+        n=0
+        total=0
+
+        while n<=total:
+
+            if rx.getBufferLen()!=0:
+                pacote = self.getData()
+                n = self.endes.getHeadParameters(pacote)[0]
+                total = self.endes.getHeadParameters(pacote)[1]
+                pacotePayload = self.endes.unpackage(pacote)
+
+                print("recebi pacote")
+                ackPacket = self.endes.buildAckPacket()
+                self.sendData(ackPacket)
+
+                imagem += pacotePayload
+
+            else:
+                nackPacket = self.endes.buildNackPacket()
+                self.sendData(nackPacket)
+                continue
+
+        return imagem
+            
         
 
                 

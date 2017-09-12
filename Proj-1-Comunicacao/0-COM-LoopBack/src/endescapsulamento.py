@@ -48,7 +48,7 @@ class Empacotamento():
 
     def unpackage (self, packet):
         #print(packet)
-        head = packet[0:4]
+        head = packet[0:6]
         payload_len = head[1:3]
         tipo = head[3]
         size = int.from_bytes(payload_len, byteorder = 'big')
@@ -58,6 +58,13 @@ class Empacotamento():
             return head
         else:
             return payload
+
+    def getHeadParameters (self, packet):
+        head = packet[0:6]
+        n = int.from_bytes(head[4], byteorder = 'big')
+        total = int.from_bytes(head[5], byteorder = 'big')
+        return n, total
+
 
     def buildSynPacket(self):
         p = self.buildHead(0x00, self.HEADTYPE.SYN, 0x00, 0x00)

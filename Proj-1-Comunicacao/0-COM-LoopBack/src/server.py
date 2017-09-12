@@ -38,7 +38,7 @@ def main(window_server):
     # print(com.rx.buffer)
     a = com.rx.buffer
     time.sleep(3)
-    received = com.confirm_server()
+    received = com.receive_packets()
     # while received == False:
     #     if com.rx.getBufferLen == 0:
     #         nackPacket = endes.buildNackPacket()
