@@ -38,7 +38,7 @@ class Empacotamento():
         return binascii.hexlify(finalByte)
 
     def buildDataPacket(self ,data, n, total):
-        pacote = self.buildHead(len(data), 0x00, bytes([n]), bytes([total]))
+        pacote = self.buildHead(len(data), 0x00, n, total)
         pacote += data
         pacote += self.buildEOP()
         return(pacote)
@@ -61,8 +61,10 @@ class Empacotamento():
 
     def getHeadParameters (self, packet):
         head = packet[0:6]
-        n = int.from_bytes(head[4], byteorder = 'big')
-        total = int.from_bytes(head[5], byteorder = 'big')
+        n = head[4]
+        total = haed[5]
+        # n = int.from_bytes(head[4], byteorder = 'big')
+        # total = int.from_bytes(head[5], byteorder = 'big')
         return n, total
 
 

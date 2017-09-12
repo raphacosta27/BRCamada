@@ -190,7 +190,6 @@ class enlace(object):
                         return False
         else:
             print('Aguardando confirmação de recebimento de pacote')
-            continue
         
         # sent = False
         # return True
@@ -198,18 +197,18 @@ class enlace(object):
     def confirm_server(self):
         received = False
         # while received == False:
-            if self.rx.getBufferLen == 0:
-                nackPacket = self.endes.buildNackPacket()
-                self.sendData(nackPacket)
-                return False
-            else:
-                # rxBuffer = self.getData()
-                print("recebi pacote")
-                ackPacket = self.endes.buildAckPacket()
-                self.sendData(ackPacket)
-                # received = True
-                return True
-                # break
+        if self.rx.getBufferLen == 0:
+            nackPacket = self.endes.buildNackPacket()
+            self.sendData(nackPacket)
+            return False
+        else:
+            # rxBuffer = self.getData()
+            print("recebi pacote")
+            ackPacket = self.endes.buildAckPacket()
+            self.sendData(ackPacket)
+            # received = True
+            return True
+            # break
         # received = False
         # return rxBuffer
 
@@ -218,7 +217,7 @@ class enlace(object):
         offset = 0
         nPacotes = math.ceil(len(payload)/2048)
         packetCounter = 0
-        while packetCounter <= nPacotes:
+        while packetCounter < nPacotes:
             if (len(payload) - offset) >= 2048:
                 pacote = self.endes.buildDataPacket((payload[offset:offset+2048]),packetCounter,nPacotes)
                 self.sendData(pacote)
@@ -240,11 +239,12 @@ class enlace(object):
     def receive_packets(self):
         imagem = bytearray()
         n=0
-        total=0
+        total=1
 
-        while n<=total:
+        while n<total:
+            time.sleep(2)
 
-            if rx.getBufferLen()!=0:
+            if self.rx.getBufferLen()!=0:
                 pacote = self.getData()
                 n = self.endes.getHeadParameters(pacote)[0]
                 total = self.endes.getHeadParameters(pacote)[1]
