@@ -16,7 +16,7 @@ serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 
 def main(window_server):
     
-    received = False
+    # received = False
 
     endes = endescapsulamento.Empacotamento()
 
@@ -38,17 +38,17 @@ def main(window_server):
     # print(com.rx.buffer)
     a = com.rx.buffer
     time.sleep(3)
-    while received == False:
-        if com.rx.getBufferLen == 0:
-            nackPacket = endes.buildNackPacket()
-            com.sendData(nackPacket)
-        else:
-            rxBuffer = com.getData()
-            print("recebi pacote")
-
-            ackPacket = endes.buildAckPacket()
-            com.sendData(ackPacket)
-            break
+    com.confirm_server()
+    # while received == False:
+    #     if com.rx.getBufferLen == 0:
+    #         nackPacket = endes.buildNackPacket()
+    #         com.sendData(nackPacket)
+    #     else:
+    #         rxBuffer = com.getData()
+    #         print("recebi pacote")
+    #         ackPacket = endes.buildAckPacket()
+    #         com.sendData(ackPacket)
+    #         break
 
     # log
     start_receiving_time = time.time()

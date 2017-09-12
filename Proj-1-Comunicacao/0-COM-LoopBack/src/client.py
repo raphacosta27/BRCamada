@@ -15,7 +15,7 @@ serialName = "/dev/ttyACM1"           # Ubuntu (variacao de)
 
 def main(window_client, filename, root):
 
-    sent = False
+    # sent = False
 
     # Inicializa enlace
     com = enlace(serialName)
@@ -60,25 +60,28 @@ def main(window_client, filename, root):
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
-    while sent == False:
+
+    com.confirm_client()
+    
+    # while sent == False:
         
-        time.sleep(2)
-        if com.rx.getBufferLen() != 0 :
-            packet = com.getData()
-            if packet != 0: 
-                packetType = getType.getType(packet)
-                if packetType.getPacketType() == 'comando':
-                    if packetType.getCommandType() == 'ACK':
-                        sent = True
-                    elif packetType.getCommandType() == 'NACK':
-                        print("Pacote não recebido, reenviando")
-                        endes = endescapsulamento.Empacotamento()
-                        packet = endes.buildDataPacket(txBuffer)    
-                        com.sendData(packet)
-                        continue
-        else:
-            print('Aguardando confirmação de recebimento de pacote')
-            continue
+    #     time.sleep(2)
+    #     if com.rx.getBufferLen() != 0 :
+    #         packet = com.getData()
+    #         if packet != 0: 
+    #             packetType = getType.getType(packet)
+    #             if packetType.getPacketType() == 'comando':
+    #                 if packetType.getCommandType() == 'ACK':
+    #                     sent = True
+    #                 elif packetType.getCommandType() == 'NACK':
+    #                     print("Pacote não recebido, reenviando")
+    #                     endes = endescapsulamento.Empacotamento()
+    #                     packet = endes.buildDataPacket(txBuffer)    
+    #                     com.sendData(packet)
+    #                     continue
+    #     else:
+    #         print('Aguardando confirmação de recebimento de pacote')
+    #         continue
 
     new_label2 = Label(window_client, text="Transmitindo .... {} bytes".format(txLen))
     new_label2.grid(row=3, column=0, sticky=W)

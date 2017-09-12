@@ -32,8 +32,10 @@ class Empacotamento():
         finalByte = bytearray(final, encoding="ascii")
         return binascii.hexlify(finalByte)
 
-    def buildDataPacket(self, data):
+    def buildDataPacket(self, n, total ,data):
         pacote = self.buildHead(len(data), 0x00)
+        pacote += bytes([n])
+        pacote += bytes([total]) 
         pacote += data
         pacote += self.buildEOP()
         return(pacote)

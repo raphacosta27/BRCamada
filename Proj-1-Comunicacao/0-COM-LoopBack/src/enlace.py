@@ -10,6 +10,9 @@
 # Importa pacote de tempo
 import time
 
+# start_receiving_time = time.time()
+# finished_receiving_time = time.time() - start_receiving_time
+
 # Construct Struct
 from construct import *
 import endescapsulamento
@@ -126,6 +129,10 @@ class enlace(object):
             synPacket = endes.buildSynPacket()
             self.sendData(synPacket)
             print("Mandando Syn")
+
+            # start_receiving_time = time.time()
+            # finished_receiving_time = time.time() - start_receiving_time
+            
             time.sleep(2)
             # print("lenBuffer" + str(self.tx.getBufferLen())) 
             #inicia timer esperando um ack e um syn
@@ -166,9 +173,47 @@ class enlace(object):
             else:
                 print("pacote vazio, reiniciando")
         
-                        
+    def confirm_client(self):
+        sent = False
+        while sent == False:
+            
+        time.sleep(2)
+        if rx.getBufferLen() != 0 :
+            packet = self.getData()
+            if packet != 0: 
+                packetType = getType.getType(packet)
+                if packetType.getPacketType() == 'comando':
+                    if packetType.getCommandType() == 'ACK':
+                        sent = True
+                    elif packetType.getCommandType() == 'NACK':
+                        print("Pacote não recebido, reenviando")
+                        endes = endescapsulamento.Empacotamento()
+                        packet = endes.buildDataPacket(txBuffer)    
+                        self.sendData(packet)
+                        continue
+        else:
+            print('Aguardando confirmação de recebimento de pacote')
+            continue
+        
+        sent = False
+        return True
 
-
+    def confirm_server(self):
+        received = False
+        endes = endescapsulamento.Empacotamento()
+        while received == False:
+            if rx.getBufferLen == 0:
+                nackPacket = endes.buildNackPacket()
+                self.sendData(nackPacket)
+            else:
+                rxBuffer = self.getData()
+                print("recebi pacote")
+                ackPacket = endes.buildAckPacket()
+                self.sendData(ackPacket)
+                received = True
+                # break
+        received = False
+        return True
 
         
                     
