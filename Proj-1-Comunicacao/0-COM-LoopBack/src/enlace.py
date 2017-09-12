@@ -25,6 +25,8 @@ from interfaceFisica import fisica
 from enlaceRx import RX
 from enlaceTx import TX
 
+import math
+
 class enlace(object):
     """ This class implements methods to the interface between Enlace and Application
     """
@@ -173,36 +175,33 @@ class enlace(object):
             else:
                 print("pacote vazio, reiniciando")
         
-    def confirm_client(self):
-        sent = False
-        while sent == False:
-            
+    def confirm_client(self):  
         time.sleep(2)
-        if rx.getBufferLen() != 0 :
+        if self.rx.getBufferLen() != 0 :
             packet = self.getData()
             if packet != 0: 
                 packetType = getType.getType(packet)
                 if packetType.getPacketType() == 'comando':
                     if packetType.getCommandType() == 'ACK':
-                        sent = True
+                        return True
                     elif packetType.getCommandType() == 'NACK':
                         print("Pacote não recebido, reenviando")
-                        endes = endescapsulamento.Empacotamento()
-                        packet = endes.buildDataPacket(txBuffer)    
-                        self.sendData(packet)
-                        continue
+                        # endes = endescapsulamento.Empacotamento()
+                        # packet = endes.buildDataPacket(txBuffer)    
+                        # self.sendData(packet)
+                        return False
         else:
             print('Aguardando confirmação de recebimento de pacote')
             continue
         
-        sent = False
-        return True
+        # sent = False
+        # return True
 
     def confirm_server(self):
         received = False
         endes = endescapsulamento.Empacotamento()
         while received == False:
-            if rx.getBufferLen == 0:
+            if self.rx.getBufferLen == 0:
                 nackPacket = endes.buildNackPacket()
                 self.sendData(nackPacket)
             else:
@@ -213,7 +212,39 @@ class enlace(object):
                 received = True
                 # break
         received = False
-        return True
+        return rxBuffer
+
+
+    def parsePacket(self, payload):
+        endes = endescapsulamento.Empacotamento()
+        offset = 0
+        nPacotes = math.ceil(len(payload)/2048)
+        packetCounter = 0
+        while packetCounter <= nPacotes:
+            if (len(payload) - offset) >= 2048:
+                pacote = endes.buildDataPacket((payload[offset:offset+2048]),packetCounter,nPacotes)
+                self.sendData(pacote)
+                confirmacao = self.confirm_client()
+                if confirmacao == True:    
+                    offset += 2048
+                    packetCounter += 1
+                else:
+                    continue
+            else:
+                pacote = endes.buildDataPacket((payload[offset:]),packetCounter,nPacotes)
+                self.sendData(pacote)
+                confirmacao = self.confirm_client()
+                if confirmacao == True:    
+                    packetCounter += 1
+                else:
+                    continue
+        
+    def receive_packets(self):
+        
+
+                
+            
+        
 
         
                     

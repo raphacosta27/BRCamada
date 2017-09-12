@@ -18,13 +18,18 @@ class Empacotamento():
         self.headSTART = 0xBB
         self.headStruct = Struct("start"/ Int8ub,
                                 "size" / Int16ub,
-                                "type"/ Int8ub)
+                                "type"/ Int8ub,
+                                "n"/ Int8ub,
+                                "total"/ Int8ub)
         self.HEADTYPE = self.HeadTypes()
-    def buildHead(self, dataLen, type):
+
+    def buildHead(self, dataLen, type, n, total):
         head = self.headStruct.build(dict(
         start = self.headSTART,
         size = dataLen,
-        type = type))
+        type = type,
+        n = n,
+        total = total))
         return (head)
 
     def buildEOP (self):
@@ -32,10 +37,8 @@ class Empacotamento():
         finalByte = bytearray(final, encoding="ascii")
         return binascii.hexlify(finalByte)
 
-    def buildDataPacket(self, n, total ,data):
-        pacote = self.buildHead(len(data), 0x00)
-        pacote += bytes([n])
-        pacote += bytes([total]) 
+    def buildDataPacket(self ,data, n, total):
+        pacote = self.buildHead(len(data), 0x00, bytes([n]), bytes([total]))
         pacote += data
         pacote += self.buildEOP()
         return(pacote)
@@ -57,17 +60,17 @@ class Empacotamento():
             return payload
 
     def buildSynPacket(self):
-        p = self.buildHead(0x00, self.HEADTYPE.SYN)
+        p = self.buildHead(0x00, self.HEADTYPE.SYN, 0x00, 0x00)
         p += self.buildEOP()
         return(p)
 
     def buildAckPacket(self):
-        p = self.buildHead(0x00, self.HEADTYPE.ACK)
+        p = self.buildHead(0x00, self.HEADTYPE.ACK, 0x00, 0x00)
         p += self.buildEOP()
         return(p)
 
     def buildNackPacket(self):
-        p = self.buildHead(0x00, self.HEADTYPE.NACK)
+        p = self.buildHead(0x00, self.HEADTYPE.NACK, 0x00, 0x00)
         p += self.buildEOP()
         return(p)
 

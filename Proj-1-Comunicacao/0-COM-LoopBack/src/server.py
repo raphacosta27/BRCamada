@@ -38,7 +38,7 @@ def main(window_server):
     # print(com.rx.buffer)
     a = com.rx.buffer
     time.sleep(3)
-    com.confirm_server()
+    received = com.confirm_server()
     # while received == False:
     #     if com.rx.getBufferLen == 0:
     #         nackPacket = endes.buildNackPacket()
@@ -62,7 +62,7 @@ def main(window_server):
     print ("Salvando dados no arquivo :")
     print (" - {}".format(imageW))
     f = open(imageW, 'wb')
-    f.write(rxBuffer)
+    f.write(received)
 
     status_label2 = Label(window_server, text ="Salvando dados no arquivo : - {}".format(imageW))
     status_label2.grid(row = 3, column =0, sticky = W)

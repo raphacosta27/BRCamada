@@ -54,14 +54,14 @@ def main(window_client, filename, root):
 
     #conectando
 
-    endes = endescapsulamento.Empacotamento()
-    packet = endes.buildDataPacket(txBuffer)    
-    com.sendData(packet)
-
+    # endes = endescapsulamento.Empacotamento()
+    # packet = endes.buildDataPacket(txBuffer)    
+    # com.sendData(packet)
+    
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
-
-    com.confirm_client()
+    com.parsePacket(txBuffer)
+    # com.confirm_client()
     
     # while sent == False:
         
