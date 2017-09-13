@@ -17,6 +17,7 @@ import time
 from construct import *
 import endescapsulamento
 import getType
+import binascii
 
 # Interface Física
 from interfaceFisica import fisica
@@ -260,19 +261,31 @@ class enlace(object):
                 print("n " + str(n))
                 print("new_n " + str(new_n))
                 print("Total " + str(total))
-                pacotePayload = self.endes.unpackage(pacote)
+                crcClient = self.endes.unpackage(pacote)[0:8]
+                pacotePayload = self.endes.unpackage(pacote)[8:]
+                key = "10001"
+                crcServer = self.endes.encodeData(str(pacote[0:6]), key)
+                finalCrc = bytearray(crcServer, encoding="ascii")
+                hexCrc = binascii.hexlify(finalCrc)
+                if hexCrc == crcClient:
 
-                if (new_n != n):
-                    print("recebi pacote")
-                    print(pacotePayload[0])
-                    n = new_n
-                    ackPacket = self.endes.buildAckPacket()
-                    self.sendData(ackPacket)
+                    if (new_n != n):
+                        print("recebi pacote")
+                        print(pacotePayload[0])
+                        n = new_n
+                        ackPacket = self.endes.buildAckPacket()
+                        self.sendData(ackPacket)
 
-                    imagem += pacotePayload
-                    print(len(imagem))
-                    time.sleep(2)
+                        imagem += pacotePayload
+                        print(len(imagem))
+                        time.sleep(2)
+                    else:
+                        continue
                 else:
+                    print("crc não confere, mandar novamente")
+                    nackPacket = self.endes.buildNackPacket()
+                    self.sendData(nackPacket)
+                    time.sleep(2)
                     continue
 
             else:
