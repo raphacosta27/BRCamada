@@ -263,10 +263,9 @@ class enlace(object):
                 print("Total " + str(total))
                 crcClient = self.endes.unpackage(pacote)[0:8]
                 pacotePayload = self.endes.unpackage(pacote)[8:]
-                key = "10001"
+                key = self.endes.getKey()
                 crcServer = self.endes.encodeData(str(pacote[0:6]), key)
-                finalCrc = bytearray(crcServer, encoding="ascii")
-                hexCrc = binascii.hexlify(finalCrc)
+                hexCrc = self.endes.stringToHex(crcServer)
                 if hexCrc == crcClient:
 
                     if (new_n != n):

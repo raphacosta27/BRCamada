@@ -40,12 +40,9 @@ class Empacotamento():
     def buildDataPacket(self ,data, n, total):
         head = self.buildHead(len(data), 0x00, n, total)
         pacote = head
-        key = "10011" 
+        key = self.getKey()
         crc = self.encodeData(str(head), key)
-        finalCrc = bytearray(crc, encoding="ascii")
-        hexKey = binascii.hexlify(finalCrc)
-        
-        print("tamanho da hexKey "+str(len(hexKey)))
+        hexKey = self.stringToHex(crc)
         pacote += hexKey
         pacote += data
         pacote += self.buildEOP()
@@ -165,6 +162,14 @@ class Empacotamento():
             codeword)
         return remainder
         
+    def getKey(self):
+        key = "10011"
+        return key
+
+    def stringToHex(self, data):
+        dataByte = bytearray(data, encoding = "ascii")
+        dataHex = binascii.hexlify(dataByte)
+        return dataHex
 
 # found = False
 # teste = open('./imgs/panda.jpg', 'rb').read()
