@@ -41,10 +41,16 @@ class Empacotamento():
         head = self.buildHead(len(data), 0x00, n, total)
         pacote = head
         key = self.getKey()
-        crc = self.encodeData(str(head), key)
-        hexKey = self.stringToHex(crc)
-        pacote += hexKey
+
+        crcHead = self.encodeData(str(head), key)
+        hexKeyHead = self.stringToHex(crcHead)
+
+        crcPayload = self.encodeData(str(data), key)
+        hexKeyPayload = self.stringToHex(crcPayload)
+
+        pacote += hexKeyHead
         pacote += data
+        pacote += hexKeyPayload
         pacote += self.buildEOP()
         return(pacote)
 

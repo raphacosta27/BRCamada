@@ -262,29 +262,42 @@ class enlace(object):
                 print("new_n " + str(new_n))
                 print("Total " + str(total))
                 crcClient = self.endes.unpackage(pacote)[0:8]
-                pacotePayload = self.endes.unpackage(pacote)[8:]
+                crcClientPayload = self.endes.unpackage(pacote)[len(pacote)-8:]
+
+                pacotePayload = self.endes.unpackage(pacote)[8:len(pacote) - 8]
+
                 key = self.endes.getKey()
+
                 crcServer = self.endes.encodeData(str(pacote[0:6]), key)
                 hexCrc = self.endes.stringToHex(crcServer)
+
+                crcServerPayload = self.endes.encodeData(str(pacotePayload[8:(len(pacotePayload) - 8)]), key)
+                hexCrcPayload = self.endes.stringToHex(crcServerPayload)
+
                 if hexCrc == crcClient:
-                    
+                    if hexCrcPayload == crcClientPayload:
+                        if (new_n != n):
+                            print("recebi pacote")
+                            print(pacotePayload[0])
+                            n = new_n
+                            ackPacket = self.endes.buildAckPacket()
+                            self.sendData(ackPacket)
 
-                    if (new_n != n):
-                        print("recebi pacote")
-                        print(pacotePayload[0])
-                        n = new_n
-                        ackPacket = self.endes.buildAckPacket()
-                        self.sendData(ackPacket)
-
-                        imagem += pacotePayload
-                        print(len(imagem))
-                        time.sleep(2)
+                            imagem += pacotePayload
+                            print(len(imagem))
+                            time.sleep(2)
+                        else:
+                            time.sleep(2)
+                            continue
                     else:
+                        print("crc Payload não confere, mandar novamente")
+                        nackPacket = self.endes.buildNackPacket()
+                        self.sendData(nackPacket)
                         time.sleep(2)
                         continue
 
                 else:
-                    print("crc não confere, mandar novamente")
+                    print("crc Head não confere, mandar novamente")
                     nackPacket = self.endes.buildNackPacket()
                     self.sendData(nackPacket)
                     time.sleep(2)
@@ -296,13 +309,6 @@ class enlace(object):
                 continue
 
         return imagem
-            
-        
-
-                
-            
-        
-
         
                     
                     
