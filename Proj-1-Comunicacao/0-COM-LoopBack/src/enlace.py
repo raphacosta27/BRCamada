@@ -267,6 +267,7 @@ class enlace(object):
                 crcServer = self.endes.encodeData(str(pacote[0:6]), key)
                 hexCrc = self.endes.stringToHex(crcServer)
                 if hexCrc == crcClient:
+                    
 
                     if (new_n != n):
                         print("recebi pacote")
@@ -279,7 +280,9 @@ class enlace(object):
                         print(len(imagem))
                         time.sleep(2)
                     else:
+                        time.sleep(2)
                         continue
+
                 else:
                     print("crc não confere, mandar novamente")
                     nackPacket = self.endes.buildNackPacket()
