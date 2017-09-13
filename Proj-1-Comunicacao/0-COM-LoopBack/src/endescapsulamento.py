@@ -163,9 +163,9 @@ class Empacotamento():
     
         # Append remainder in the original data
         codeword = data + remainder
-        print("Remainder : ", remainder)
-        print("Encoded Data (Data + Remainder) : ",
-            codeword)
+        # print("Remainder : ", remainder)
+        # print("Encoded Data (Data + Remainder) : ",
+        #     codeword)
         return remainder
         
     def getKey(self):

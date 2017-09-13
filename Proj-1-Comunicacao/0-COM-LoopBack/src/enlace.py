@@ -261,29 +261,37 @@ class enlace(object):
                 print("n " + str(n))
                 print("new_n " + str(new_n))
                 print("Total " + str(total))
-                crcClient = self.endes.unpackage(pacote)[0:8]
-                crcClientPayload = self.endes.unpackage(pacote)[len(pacote)-8:]
+                payload = self.endes.unpackage(pacote)
+                data = payload[8:len(payload)-8]
+                crcClient = payload[0:8]
+                # crcClient = self.endes.unpackage(pacote)[0:8]
+                # crcClientPayload = self.endes.unpackage(pacote)[-8:0]
+                crcClientPayload = payload[len(payload)-8:]
+                print("crcClientPayload: " + str(len(crcClientPayload)))
 
-                pacotePayload = self.endes.unpackage(pacote)[8:len(pacote) - 8]
+                # pacotePayload = self.endes.unpackage(pacote)[14:len(pacote) - 8]
+                # print("lenPacotePayload: " + str(len(pacotePayload)))
 
                 key = self.endes.getKey()
 
                 crcServer = self.endes.encodeData(str(pacote[0:6]), key)
                 hexCrc = self.endes.stringToHex(crcServer)
 
-                crcServerPayload = self.endes.encodeData(str(pacotePayload[8:(len(pacotePayload) - 8)]), key)
+                crcServerPayload = self.endes.encodeData(str(data), key)
+                print("lenCrcPayload: " + str(len(crcServerPayload)))
+
+
                 hexCrcPayload = self.endes.stringToHex(crcServerPayload)
 
                 if hexCrc == crcClient:
                     if hexCrcPayload == crcClientPayload:
                         if (new_n != n):
                             print("recebi pacote")
-                            print(pacotePayload[0])
                             n = new_n
                             ackPacket = self.endes.buildAckPacket()
                             self.sendData(ackPacket)
 
-                            imagem += pacotePayload
+                            imagem += data
                             print(len(imagem))
                             time.sleep(2)
                         else:
