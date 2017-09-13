@@ -264,6 +264,7 @@ class enlace(object):
 
                 if (new_n != n):
                     print("recebi pacote")
+                    print(pacotePayload[0])
                     n = new_n
                     ackPacket = self.endes.buildAckPacket()
                     self.sendData(ackPacket)
