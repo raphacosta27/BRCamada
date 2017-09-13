@@ -220,19 +220,27 @@ class enlace(object):
         while packetCounter < nPacotes:
             if (len(payload) - offset) >= 2048:
                 pacote = self.endes.buildDataPacket((payload[offset:offset+2048]),packetCounter,nPacotes)
+                print("enes " + str(packetCounter))
                 self.sendData(pacote)
                 confirmacao = self.confirm_client()
-                if confirmacao == True:    
+                if confirmacao == True:
+                    print("confirmado")    
+                    print(len(pacote))
                     offset += 2048
                     packetCounter += 1
+                    # time.sleep(2)
                 else:
                     continue
             else:
                 pacote = self.endes.buildDataPacket((payload[offset:]),packetCounter,nPacotes)
                 self.sendData(pacote)
                 confirmacao = self.confirm_client()
-                if confirmacao == True:    
+                if confirmacao == True:
+                    print("confirmado")
+                    print(len(pacote))
+
                     packetCounter += 1
+                    # time.sleep(2)
                 else:
                     continue
         
@@ -242,19 +250,29 @@ class enlace(object):
         total=1
 
         while n<total:
-            time.sleep(2)
 
             if self.rx.getBufferLen()!=0:
-                pacote = self.getData()
-                n = self.endes.getHeadParameters(pacote)[0]
-                total = self.endes.getHeadParameters(pacote)[1]
+                pacote = self.rx.searchForPacket()
+                # print("lenPacote " + str(len(pacote)))
+                headParameters = self.endes.getHeadParameters(pacote)
+                new_n = headParameters[0] + 1
+                total = headParameters[1]
+                print("n " + str(n))
+                print("new_n " + str(new_n))
+                print("Total " + str(total))
                 pacotePayload = self.endes.unpackage(pacote)
 
-                print("recebi pacote")
-                ackPacket = self.endes.buildAckPacket()
-                self.sendData(ackPacket)
+                if (new_n != n):
+                    print("recebi pacote")
+                    n = new_n
+                    ackPacket = self.endes.buildAckPacket()
+                    self.sendData(ackPacket)
 
-                imagem += pacotePayload
+                    imagem += pacotePayload
+                    print(len(imagem))
+                    time.sleep(2)
+                else:
+                    continue
 
             else:
                 nackPacket = self.endes.buildNackPacket()

@@ -36,7 +36,7 @@ def main(window_server):
     print ("Recebendo dados .... ")
     #print(com.tx.buffer)
     # print(com.rx.buffer)
-    a = com.rx.buffer
+    # a = com.rx.buffer
     time.sleep(3)
     received = com.receive_packets()
     # while received == False:
@@ -54,7 +54,7 @@ def main(window_server):
     start_receiving_time = time.time()
     #print ("Lido              {} bytes ".format(endes.getPacketLen(a)))
 
-    status_label1 = Label(window_server, text ="Lido              {} bytes ".format(endes.getPacketLen(a)))
+    status_label1 = Label(window_server, text ="Lido              {} bytes ".format(len(received)))
     status_label1.grid(row = 2, column =0, sticky = W)
 
     # Salva imagem recebida em arquivo

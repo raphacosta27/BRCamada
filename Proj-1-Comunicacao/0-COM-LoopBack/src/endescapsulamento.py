@@ -62,7 +62,7 @@ class Empacotamento():
     def getHeadParameters (self, packet):
         head = packet[0:6]
         n = head[4]
-        total = haed[5]
+        total = head[5]
         # n = int.from_bytes(head[4], byteorder = 'big')
         # total = int.from_bytes(head[5], byteorder = 'big')
         return n, total
