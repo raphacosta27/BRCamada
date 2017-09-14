@@ -81,7 +81,7 @@ class enlace(object):
         sync = False
         while sync == False:
             #iniciar timer para esperar um syn
-            time.sleep(1)
+            time.sleep(2)
             if self.rx.getBufferLen() != 0:
                 print("recebi algo")
                 packet = self.getData()
@@ -127,6 +127,7 @@ class enlace(object):
     def conecta(self):
         sync = False
         while sync == False:
+            time.sleep(1)
             synPacket = self.endes.buildSynPacket()
             self.sendData(synPacket)
             print("Mandando Syn")
@@ -221,12 +222,12 @@ class enlace(object):
         while packetCounter < nPacotes:
             if (len(payload) - offset) >= 2048:
                 pacote = self.endes.buildDataPacket((payload[offset:offset+2048]),packetCounter,nPacotes)
-                print("enes " + str(packetCounter))
+                print("Enviando pacote: " + str(packetCounter + 1)+"/" + str(nPacotes))
                 self.sendData(pacote)
                 confirmacao = self.confirm_client()
                 if confirmacao == True:
-                    print("confirmado")    
-                    print(len(pacote))
+                    print("Pacote: " + str(packetCounter + 1) + " de " + str(len(pacote)-40) + " recebido")
+                    print("--------------------------")        
                     offset += 2048
                     packetCounter += 1
                     # time.sleep(2)
@@ -235,10 +236,13 @@ class enlace(object):
             else:
                 pacote = self.endes.buildDataPacket((payload[offset:]),packetCounter,nPacotes)
                 self.sendData(pacote)
+                print("Enviando pacote: " + str(packetCounter + 1)+"/" + str(nPacotes))
                 confirmacao = self.confirm_client()
                 if confirmacao == True:
-                    print("confirmado")
-                    print(len(pacote))
+                    # print("confirmado")
+                    print("Pacote: " + str(packetCounter + 1) + " de " + str(len(pacote)-40) + " bytes " + "recebido")
+                    print("--------------------------")        
+                    # print(len(pacote))
 
                     packetCounter += 1
                     # time.sleep(2)
@@ -258,16 +262,15 @@ class enlace(object):
                 headParameters = self.endes.getHeadParameters(pacote)
                 new_n = headParameters[0] + 1
                 total = headParameters[1]
-                print("n " + str(n))
-                print("new_n " + str(new_n))
-                print("Total " + str(total))
+                print("Recebendo pacote: " + str(new_n) + "/" + str(total))
+                # print("new_n " + str(new_n))
+                # print("Total " + str(total))
                 payload = self.endes.unpackage(pacote)
                 data = payload[8:len(payload)-8]
                 crcClient = payload[0:8]
                 # crcClient = self.endes.unpackage(pacote)[0:8]
                 # crcClientPayload = self.endes.unpackage(pacote)[-8:0]
                 crcClientPayload = payload[len(payload)-8:]
-                print("crcClientPayload: " + str(len(crcClientPayload)))
 
                 # pacotePayload = self.endes.unpackage(pacote)[14:len(pacote) - 8]
                 # print("lenPacotePayload: " + str(len(pacotePayload)))
@@ -278,7 +281,6 @@ class enlace(object):
                 hexCrc = self.endes.stringToHex(crcServer)
 
                 crcServerPayload = self.endes.encodeData(str(data), key)
-                print("lenCrcPayload: " + str(len(crcServerPayload)))
 
 
                 hexCrcPayload = self.endes.stringToHex(crcServerPayload)
@@ -286,15 +288,16 @@ class enlace(object):
                 if hexCrc == crcClient:
                     if hexCrcPayload == crcClientPayload:
                         if (new_n != n):
-                            print("recebi pacote")
+                            print("Pacote: " + str(new_n) + "/" + str(total) + " de " + str(len(payload) - 16) + " bytes " + "recebido")
+                            print("--------------------------")
                             n = new_n
                             ackPacket = self.endes.buildAckPacket()
                             self.sendData(ackPacket)
 
                             imagem += data
-                            print(len(imagem))
                             time.sleep(2)
                         else:
+                            print("Pacote: " + str(new_n) + "/" + str(total) + " já foi recebido, aguardando próximo pacote")
                             time.sleep(2)
                             continue
                     else:

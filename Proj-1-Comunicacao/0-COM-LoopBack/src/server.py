@@ -29,11 +29,14 @@ def main(window_server):
     com.receive()
     print("conectou")
 
+    start_receiving_time = time.time()
+
     # Endereco da imagem a ser salva
     imageW = "./imgs/recebida.jpg"
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
+    print("-------------------------")
     #print(com.tx.buffer)
     # print(com.rx.buffer)
     # a = com.rx.buffer
@@ -51,16 +54,15 @@ def main(window_server):
     #         break
 
     # log
-    start_receiving_time = time.time()
+    
     #print ("Lido              {} bytes ".format(endes.getPacketLen(a)))
 
     status_label1 = Label(window_server, text ="Lido              {} bytes ".format(len(received)))
     status_label1.grid(row = 2, column =0, sticky = W)
 
     # Salva imagem recebida em arquivo
-    print("-------------------------")
-    print ("Salvando dados no arquivo :")
-    print (" - {}".format(imageW))
+    print ("Salvando dados no arquivo : " + imageW)
+    # print (" - {}".format(imageW))
     f = open(imageW, 'wb')
     f.write(received)
 
