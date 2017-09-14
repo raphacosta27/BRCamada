@@ -9,7 +9,7 @@ import getType
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+serialName = "/dev/ttyACM1"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
@@ -50,7 +50,7 @@ def main(window_client, filename, root):
     print("-------------------------")
     txBuffer = open(imageR, 'rb').read()
     txLen    = len(txBuffer)
-    print(txLen)
+    # print(txLen)
 
     #conectando
 
@@ -59,7 +59,7 @@ def main(window_client, filename, root):
     # com.sendData(packet)
     
     # Transmite imagem
-    print("Transmitindo .... {} bytes".format(txLen))
+    # print("Transmitindo .... {} bytes".format(txLen))
     com.parsePacket(txBuffer)
     # com.confirm_client()
     
@@ -92,7 +92,7 @@ def main(window_client, filename, root):
 
     # Atualiza dados da transmissão
     txSize = com.tx.getStatus()
-    print ("Transmitido       {} bytes ".format(txSize))
+    # print ("Transmitido       {} bytes ".format(txSize))
 
 
     # interfaceClient.MyFrame.finished(window)
